@@ -1,13 +1,23 @@
 import React, { Component } from 'react'
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Route } from 'react-router-dom'
+import thunkMiddleware from 'redux-thunk'
+import { createLogger } from 'redux-logger'
 import rootReducer from './reducers'
-import Contacts from './components/contacts'
+import ContactList from './components/ContactList'
 import './App.css'
 
 
-let store = createStore(rootReducer)
+const loggerMiddleware = createLogger()
+
+let store = createStore(
+  rootReducer,
+  applyMiddleware(
+    thunkMiddleware, 
+    loggerMiddleware 
+  )
+)
 
 
 class App extends Component {
@@ -15,7 +25,7 @@ class App extends Component {
     return (
       <Provider store={store}>
         <BrowserRouter>
-          <Route path="/contacts" component={Contacts} />
+          <Route path="/contacts" component={ContactList} />
         </BrowserRouter>
       </Provider>
     )

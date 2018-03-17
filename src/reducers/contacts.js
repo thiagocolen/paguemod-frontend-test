@@ -1,15 +1,19 @@
+import * as types from '../constants/ActionTypes'
 
-const initialState = {}
+const initialState = {
+  contactList: []
+}
 
-const contacts = (state = initialState, action) => {
+const contactsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'ACTION_TESTE':
+    case types.GET_ALL_CONTACTS:
       return {
-        ...state
+        ...state,
+        contactList: action.payload
       } 
     default:
       return state
   }
 }
  
-export default contacts
+export default contactsReducer
