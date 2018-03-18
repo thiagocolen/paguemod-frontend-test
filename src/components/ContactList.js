@@ -3,9 +3,11 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
+import { Link } from 'react-router-dom' //todo: remove this
 import BootstrapTable from 'react-bootstrap-table-next'
 import RaisedButton from 'material-ui/RaisedButton'
-import { Link } from 'react-router-dom'
+import ActionHome from 'material-ui/svg-icons/action/home'
+
 
 import * as contactActions from '../actions'
 
@@ -101,6 +103,29 @@ class Contacts extends React.Component {
     this.props.actions.editContact(someContact, someContact.id)  
   }
 
+  actionButtons = (cell, row, rowIndex) => {
+    return(
+      <ActionHome
+        onClick={this.handleEditContact.bind(this, cell)} />
+    )
+  }
+
+  contacTableColumns = [{
+    dataField: 'userInfo.name',
+    text: 'Name'
+  }, {
+    dataField: 'address.streetName',
+    text: 'Address'
+  }, {
+    dataField: 'id',
+    text: 'Actions',
+    formatter: this.actionButtons.bind(this)
+  }]
+
+  handleEditContact = (id) => {
+    this.props.history.push('/edit-contact-step-1/' + id)
+  }
+
   render() {
     return (
       <div className="container">
@@ -126,7 +151,7 @@ class Contacts extends React.Component {
             <BootstrapTable 
               keyField='id' 
               data={ this.props.contactList } 
-              columns={ contacTableColumns }
+              columns={ this.contacTableColumns }
               striped
               hover
               condensed />
@@ -138,17 +163,7 @@ class Contacts extends React.Component {
   }
 }
 
-const contacTableColumns = [{
-  dataField: 'id',
-  text: 'ID',
-  hidden: true
-}, {
-  dataField: 'userInfo.name',
-  text: 'Name'
-}, {
-  dataField: 'address.streetName',
-  text: 'Address'
-}]
+
 
 Contacts.propTypes = {
   contactList: PropTypes.array

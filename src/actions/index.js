@@ -8,6 +8,13 @@ export const getAllContacts = () => dispatch => {
   })
 }
 
+export const addSelectedContactToForm = (selectedContact) => dispatch => {
+  dispatch({
+    type: types.ADD_SELECTED_CONTACT_TO_FORM,
+    payload: selectedContact
+  })
+}
+
 export const addContact = (contact) => dispatch => {
   dispatch({
     type: types.ADD_CONTACT,

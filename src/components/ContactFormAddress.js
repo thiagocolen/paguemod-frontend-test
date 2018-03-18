@@ -17,24 +17,38 @@ class ContactFormAddress extends React.Component {
     this.state = {
       snackbarOpen: false,
       address: {
-        streetName: 'String',
-        streetNumber: 1,
-        neighborhood: 'String',
-        complement: 'String',
-        zip: '12345678',
-        city: 'String',
-        state: 'SP',
-        country: 'String' 
+        streetName: '',
+        streetNumber: '',
+        neighborhood: '',
+        complement: '',
+        zip: '',
+        city: '',
+        state: '',
+        country: '' 
       }
     }
   }
 
   componentDidMount() {
     console.log('componentDidMount')
+    if (
+      this.props.match.path === '/edit-contact-step-2/:id' &&
+      this.props.newContact.id !== undefined
+    ) {
+      this.setState({ address: this.props.newContact.address })
+    }
   }  
 
   componentWillReceiveProps(nextProps) {
+    console.log('componentWillReceiveProps', nextProps)
+
     if (nextProps.newContactAddedMessage === 'ADDRESS_ADDED') {
+
+      if (this.props.match.path === '/edit-contact-step-2/:id') {
+        this.props.actions.editContact(nextProps.newContact, nextProps.newContact.id)
+        return
+      }
+  
       this.props.actions.addContact(nextProps.newContact)
       return
     }
@@ -54,10 +68,21 @@ class ContactFormAddress extends React.Component {
   }
 
   handleChange = (prop, event, newValue) => {
-    this.setState({ [prop]: newValue })
+    this.setState({ 
+      address: { 
+        ...this.state.address,
+        [prop]: newValue 
+      } 
+    })
   }
 
   handlePreviousStep = () => {
+    if (this.props.match.path === '/edit-contact-step-2/:id') {
+      this.props.actions.newContactAddress(this.state.address)      
+      this.props.history.push('/edit-contact-step-1/' + this.props.match.params.id)
+
+      return    
+    }
     this.props.history.push('/new-contact-step-1')
   }
 
@@ -180,6 +205,7 @@ ContactFormAddress.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
+  contactList: state.contactsReducer.contactList,  
   newContact: state.contactsReducer.newContact,
   newContactAddedMessage: state.contactsReducer.newContactAddedMessage
 })

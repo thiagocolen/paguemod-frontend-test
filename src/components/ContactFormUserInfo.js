@@ -15,26 +15,72 @@ class ContactFormUserInfo extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      name: 'NewString',
-      cpf: '12345678901',
-      cnpj: '12345678901234',
-      gender: 'm',
-      website: 'String',
-      email: 'String',
-      telephone: 'String' 
+      userInfo: {
+        name: '',
+        cpf: '',
+        cnpj: '',
+        gender: '',
+        website: '',
+        email: '',
+        telephone: '' 
+      }
     }
   }
 
   componentDidMount() {
     console.log('componentDidMount')
+    if (
+      this.props.match.path === '/edit-contact-step-1/:id' &&
+      this.props.newContact.id === undefined
+    ) {
+      this.props.actions.getAllContacts()
+      return
+    }
+
+    if (
+      this.props.match.path === '/edit-contact-step-1/:id' &&
+      this.props.newContact.id !== undefined
+    ) {
+      this.setState({ userInfo: this.props.newContact.userInfo })
+      return
+    }
+
   }  
 
+  componentWillReceiveProps(nextProps) {
+    console.log('componentWillReceiveProps', nextProps.newContact)
+
+    if (
+      nextProps.contactList.length > 0 &&
+      nextProps.newContact.id === undefined
+    ) {
+      let selectedContact = nextProps.contactList.filter(item => {
+        return item.id === this.props.match.params.id
+      })
+
+      this.props.actions.addSelectedContactToForm(selectedContact[0])
+    }
+
+    if (nextProps.newContact.id !== undefined) {  
+      this.setState({ userInfo: nextProps.newContact.userInfo })
+    }
+  }
+
   handleChange = (prop, event, newValue) => {
-    this.setState({ [prop]: newValue })
+    this.setState({ 
+      userInfo: { 
+        ...this.state.userInfo,
+        [prop]: newValue 
+      } 
+    })
   }
 
   handleNextStep = () => {
-    this.props.actions.newContactUserInfo(this.state)
+    this.props.actions.newContactUserInfo(this.state.userInfo)
+    if (this.props.match.path === '/edit-contact-step-1/:id') { 
+      this.props.history.push('/edit-contact-step-2/' + this.props.match.params.id)
+      return     
+    }
     this.props.history.push('/new-contact-step-2')
   }
   
@@ -58,8 +104,8 @@ class ContactFormUserInfo extends React.Component {
           <div className="col-xs-12">
             <TextField
               floatingLabelText="Name"
-              value={this.state.name}
-              onChange={this.handleChange.bind(this, 'name')} />
+              value={this.state.userInfo.name}
+              onChange={this.handleChange.bind(this, 'name')}  />
           </div>
         </div>
 
@@ -67,7 +113,7 @@ class ContactFormUserInfo extends React.Component {
           <div className="col-xs-12">
             <TextField
               floatingLabelText="CPF"
-              value={this.state.cpf}
+              value={this.state.userInfo.cpf}
               onChange={this.handleChange.bind(this, 'cpf')} />
           </div>
         </div>
@@ -76,7 +122,7 @@ class ContactFormUserInfo extends React.Component {
           <div className="col-xs-12">
             <TextField
               floatingLabelText="CNPJ"
-              value={this.state.cnpj}
+              value={this.state.userInfo.cnpj}
               onChange={this.handleChange.bind(this, 'cnpj')} />
           </div>
         </div>
@@ -85,7 +131,7 @@ class ContactFormUserInfo extends React.Component {
           <div className="col-xs-12">
             <TextField
               floatingLabelText="Gender"
-              value={this.state.gender}
+              value={this.state.userInfo.gender}
               onChange={this.handleChange.bind(this, 'gender')} />
           </div>
         </div>
@@ -94,7 +140,7 @@ class ContactFormUserInfo extends React.Component {
           <div className="col-xs-12">
             <TextField
               floatingLabelText="Website"
-              value={this.state.website}
+              value={this.state.userInfo.website}
               onChange={this.handleChange.bind(this, 'website')} />
           </div>
         </div>
@@ -103,7 +149,7 @@ class ContactFormUserInfo extends React.Component {
           <div className="col-xs-12">
             <TextField
               floatingLabelText="e-mail"
-              value={this.state.email}
+              value={this.state.userInfo.email}
               onChange={this.handleChange.bind(this, 'email')} />
           </div>
         </div>
@@ -112,7 +158,7 @@ class ContactFormUserInfo extends React.Component {
           <div className="col-xs-12">
             <TextField
               floatingLabelText="Telephone"
-              value={this.state.telephone}
+              value={this.state.userInfo.telephone}
               onChange={this.handleChange.bind(this, 'telephone')} />
           </div>
         </div>
@@ -138,11 +184,12 @@ class ContactFormUserInfo extends React.Component {
 }
 
 ContactFormUserInfo.propTypes = {
-  // contactList: PropTypes.array
+  contactList: PropTypes.array
 }
 
 const mapStateToProps = (state) => ({
-  // contactList: state.contactsReducer.contactList
+  contactList: state.contactsReducer.contactList,
+  newContact: state.contactsReducer.newContact
 })
 
 const mapDispatchToProps = (dispatch) => {

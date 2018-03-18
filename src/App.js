@@ -39,6 +39,8 @@ class App extends Component {
               <Route path="/contacts" component={ContactList} />
               <Route path="/new-contact-step-1" component={ContactFormUserInfo} />
               <Route path="/new-contact-step-2" component={ContactFormAddress} />
+              <Route path="/edit-contact-step-1/:id" component={ContactFormUserInfo} />
+              <Route path="/edit-contact-step-2/:id" component={ContactFormAddress} />
             </div>
           </BrowserRouter>
         </Provider>

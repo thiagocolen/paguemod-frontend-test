@@ -4,7 +4,16 @@ const initialState = {
   contactList: [],
   newContact: {
     userInfo: {},
-    address: {}
+    address: {
+      streetName: '',
+      streetNumber: null,
+      neighborhood: '',
+      complement: '',
+      zip: '',
+      city: '',
+      state: '',
+      country: ''       
+    }
   },
   newContactAddedMessage: ''
 }
@@ -21,7 +30,11 @@ const contactsReducer = (state = initialState, action) => {
     case `${types.EDIT_CONTACT}_FULFILLED`:
       return {
         ...state,
-        contactList: action.payload
+        newContact: {
+          userInfo: {},
+          address: {}
+        },
+        newContactAddedMessage: 'FULFILLED'
       } 
 
     case `${types.ADD_CONTACT}_FULFILLED`:
@@ -60,7 +73,16 @@ const contactsReducer = (state = initialState, action) => {
         ...state,
         newContact: {
           ...state.newContact,
-          address: action.payload
+          address: {
+            streetName: action.payload.streetName,
+            streetNumber: Number(action.payload.streetNumber),
+            neighborhood: action.payload.neighborhood,
+            complement: action.payload.complement,
+            zip: action.payload.zip,
+            city: action.payload.city,
+            state: action.payload.state,
+            country: action.payload.country              
+          }
         },
         newContactAddedMessage: 'ADDRESS_ADDED'        
       }
@@ -79,7 +101,13 @@ const contactsReducer = (state = initialState, action) => {
         ...state,
         newContactAddedMessage: ''
       }
- 
+
+    case types.ADD_SELECTED_CONTACT_TO_FORM:
+      return {
+        ...state,
+        newContact: action.payload
+      }
+
     default:
       return state
   }
