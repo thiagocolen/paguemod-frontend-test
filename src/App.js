@@ -5,6 +5,13 @@ import { BrowserRouter, Route } from 'react-router-dom'
 import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import promiseMiddleware from 'redux-promise-middleware'
+
+import ReduxBlockUi from 'react-block-ui/redux'
+import reduxMiddleware from 'react-block-ui/reduxMiddleware';
+import 'react-block-ui/style.css'
+import CircularProgress from 'material-ui/CircularProgress'
+
+
 import rootReducer from './reducers'
 
 import ContactList from './components/ContactList'
@@ -23,6 +30,7 @@ let store = createStore(
   rootReducer,
   applyMiddleware(
     promiseMiddleware(),
+    reduxMiddleware,
     thunkMiddleware, 
     loggerMiddleware 
   )
@@ -33,17 +41,28 @@ class App extends Component {
   render() {
     return (
       <MuiThemeProvider>
-        <Provider store={store}>
-          <BrowserRouter>
-            <div>
-              <Route path="/contacts" component={ContactList} />
-              <Route path="/new-contact-step-1" component={ContactFormUserInfo} />
-              <Route path="/new-contact-step-2" component={ContactFormAddress} />
-              <Route path="/edit-contact-step-1/:id" component={ContactFormUserInfo} />
-              <Route path="/edit-contact-step-2/:id" component={ContactFormAddress} />
-            </div>
-          </BrowserRouter>
-        </Provider>
+          <ReduxBlockUi
+            tag="div"
+            block={[/_PENDING/]}
+            unblock={[/_FULFILLED/, /_REJECTED/]}
+            loader={
+              <CircularProgress size = {40}
+              thickness = {4} />
+            }>
+
+          <Provider store={store}>
+            <BrowserRouter>
+              <div>
+                <Route path="/contacts" component={ContactList} />
+                <Route path="/new-contact-step-1" component={ContactFormUserInfo} />
+                <Route path="/new-contact-step-2" component={ContactFormAddress} />
+                <Route path="/edit-contact-step-1/:id" component={ContactFormUserInfo} />
+                <Route path="/edit-contact-step-2/:id" component={ContactFormAddress} />
+              </div>
+            </BrowserRouter>
+          </Provider>
+        </ReduxBlockUi>
+
       </MuiThemeProvider>
     )
   }

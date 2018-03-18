@@ -56,7 +56,7 @@ const contactsReducer = (state = initialState, action) => {
     case `${types.DELETE_CONTACT}_FULFILLED`:
       return {
         ...state,
-        contactList: action.payload
+        newContactAddedMessage: 'DELETED_CONTACT'
       }
       
     case types.NEW_CONTACT_USER_INFO: 

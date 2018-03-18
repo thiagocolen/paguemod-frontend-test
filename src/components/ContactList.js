@@ -6,7 +6,8 @@ import { bindActionCreators } from 'redux'
 import { Link } from 'react-router-dom' //todo: remove this
 import BootstrapTable from 'react-bootstrap-table-next'
 import RaisedButton from 'material-ui/RaisedButton'
-import ActionHome from 'material-ui/svg-icons/action/home'
+import ModeEdit from 'material-ui/svg-icons/editor/mode-edit'
+import Delete from'material-ui/svg-icons/action/delete'
 
 
 import * as contactActions from '../actions'
@@ -25,6 +26,15 @@ class Contacts extends React.Component {
     // this.addContact()
     // this.deleteContact()
   }  
+
+  componentWillReceiveProps(nextProps) {
+    console.log('componentWillReceiveProps', nextProps)
+  
+    if (nextProps.newContactAddedMessage === 'DELETED_CONTACT') {
+      this.props.actions.clearNewContactAddedMessage()    
+      this.props.actions.getAllContacts()
+    }
+  }
 
   deleteContact () {
     let someContact = { 
@@ -105,8 +115,10 @@ class Contacts extends React.Component {
 
   actionButtons = (cell, row, rowIndex) => {
     return(
-      <ActionHome
-        onClick={this.handleEditContact.bind(this, cell)} />
+      <div>
+        <ModeEdit onClick={this.handleEditContact.bind(this, cell)} />
+        <Delete onClick={this.handleDeleteContact.bind(this, cell)} />
+      </div>
     )
   }
 
@@ -122,8 +134,14 @@ class Contacts extends React.Component {
     formatter: this.actionButtons.bind(this)
   }]
 
+  emptyTable = () => (<h4>loading data</h4>)
+
   handleEditContact = (id) => {
     this.props.history.push('/edit-contact-step-1/' + id)
+  }
+
+  handleDeleteContact = (id) => {
+    this.props.actions.deleteContact(id)
   }
 
   render() {
@@ -132,7 +150,7 @@ class Contacts extends React.Component {
 
         <div className="row">
           <div className="col-xs-12">
-            <h1>contacts Component</h1>
+            <h1>Contacts </h1>
           </div>
         </div>
 
@@ -152,6 +170,7 @@ class Contacts extends React.Component {
               keyField='id' 
               data={ this.props.contactList } 
               columns={ this.contacTableColumns }
+              noDataIndication={ this.emptyTable }
               striped
               hover
               condensed />
@@ -164,13 +183,14 @@ class Contacts extends React.Component {
 }
 
 
-
 Contacts.propTypes = {
-  contactList: PropTypes.array
+  contactList: PropTypes.array,
+  newContactAddedMessage: PropTypes.string
 }
 
 const mapStateToProps = (state) => ({
-  contactList: state.contactsReducer.contactList
+  contactList: state.contactsReducer.contactList,
+  newContactAddedMessage: state.contactsReducer.newContactAddedMessage
 })
 
 const mapDispatchToProps = (dispatch) => {
