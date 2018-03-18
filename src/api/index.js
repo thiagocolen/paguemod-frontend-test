@@ -12,9 +12,6 @@ var myAxios = axios.create({
 })
 
 
-
-
-
 class Api {
 
   static getAllContacts () {
@@ -33,9 +30,7 @@ class Api {
     return new Promise((resolve, reject) => {
       myAxios.post('/contacts', contact)
         .then(() => {
-          this.getAllContacts().then(response => {
-            resolve(response)
-          })  
+          resolve()
         })
         .catch((error) => {
           reject(error)
@@ -47,9 +42,7 @@ class Api {
     return new Promise((resolve, reject) => {
       myAxios.put('/contacts/' + contactId, contact)
         .then(() => {
-          this.getAllContacts().then(response => {
-            resolve(response)
-          }) 
+          resolve()
         })
         .catch((error) => {
           reject(error)
@@ -61,9 +54,7 @@ class Api {
     return new Promise((resolve, reject) => {
       myAxios.delete('/contacts/' + contactId)
         .then(() => {
-          this.getAllContacts().then(response => {
-            resolve(response)
-          }) 
+          resolve()
         })
         .catch((error) => {
           reject(error)

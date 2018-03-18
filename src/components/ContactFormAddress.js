@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
-import { Link } from 'react-router-dom'
+import Snackbar from 'material-ui/Snackbar'
 
 import * as contactActions from '../actions'
 
@@ -15,14 +15,17 @@ class ContactFormAddress extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      streetName: 'String',
-      streetNumber: 1,
-      neighborhood: 'String',
-      complement: 'String',
-      zip: '12345678',
-      city: 'String',
-      state: 'SP',
-      country: 'String' 
+      snackbarOpen: false,
+      address: {
+        streetName: 'String',
+        streetNumber: 1,
+        neighborhood: 'String',
+        complement: 'String',
+        zip: '12345678',
+        city: 'String',
+        state: 'SP',
+        country: 'String' 
+      }
     }
   }
 
@@ -30,8 +33,36 @@ class ContactFormAddress extends React.Component {
     console.log('componentDidMount')
   }  
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.newContactAddedMessage === 'ADDRESS_ADDED') {
+      this.props.actions.addContact(nextProps.newContact)
+      return
+    }
+
+    if (nextProps.newContactAddedMessage === 'FULFILLED') {
+      this.setState({ snackbarOpen: true })
+      return
+    }
+  }
+
+  handleSnackbarClose = () => {
+    this.setState({ snackbarOpen: false })
+    this.props.actions.clearNewContactAddedMessage()
+    setTimeout(() => {
+      this.props.history.push('/contacts')                
+    }, 800)
+  }
+
   handleChange = (prop, event, newValue) => {
     this.setState({ [prop]: newValue })
+  }
+
+  handlePreviousStep = () => {
+    this.props.history.push('/new-contact-step-1')
+  }
+
+  handleSaveContact = () => {
+    this.props.actions.newContactAddress(this.state.address)
   }
 
   render() {
@@ -49,7 +80,7 @@ class ContactFormAddress extends React.Component {
           <div className="col-xs-12">
             <TextField
               floatingLabelText="Street Name"
-              value={this.state.streetName}
+              value={this.state.address.streetName}
               onChange={this.handleChange.bind(this, 'streetName')} />
           </div>
         </div>
@@ -58,7 +89,7 @@ class ContactFormAddress extends React.Component {
           <div className="col-xs-12">
             <TextField
               floatingLabelText="Street Number"
-              value={this.state.streetNumber}
+              value={this.state.address.streetNumber}
               onChange={this.handleChange.bind(this, 'streetNumber')} />
           </div>
         </div>
@@ -67,7 +98,7 @@ class ContactFormAddress extends React.Component {
           <div className="col-xs-12">
             <TextField
               floatingLabelText="Neighborhood"
-              value={this.state.neighborhood}
+              value={this.state.address.neighborhood}
               onChange={this.handleChange.bind(this, 'neighborhood')} />
           </div>
         </div>
@@ -76,7 +107,7 @@ class ContactFormAddress extends React.Component {
           <div className="col-xs-12">
             <TextField
               floatingLabelText="Complement"
-              value={this.state.complement}
+              value={this.state.address.complement}
               onChange={this.handleChange.bind(this, 'complement')} />
           </div>
         </div>
@@ -85,7 +116,7 @@ class ContactFormAddress extends React.Component {
           <div className="col-xs-12">
             <TextField
               floatingLabelText="Zip"
-              value={this.state.zip}
+              value={this.state.address.zip}
               onChange={this.handleChange.bind(this, 'zip')} />
           </div>
         </div>
@@ -94,7 +125,7 @@ class ContactFormAddress extends React.Component {
           <div className="col-xs-12">
             <TextField
               floatingLabelText="City"
-              value={this.state.city}
+              value={this.state.address.city}
               onChange={this.handleChange.bind(this, 'city')} />
           </div>
         </div>
@@ -103,7 +134,7 @@ class ContactFormAddress extends React.Component {
           <div className="col-xs-12">
             <TextField
               floatingLabelText="State"
-              value={this.state.state}
+              value={this.state.address.state}
               onChange={this.handleChange.bind(this, 'state')} />
           </div>
         </div>
@@ -112,27 +143,31 @@ class ContactFormAddress extends React.Component {
           <div className="col-xs-12">
             <TextField
               floatingLabelText="Country"
-              value={this.state.country}
+              value={this.state.address.country}
               onChange={this.handleChange.bind(this, 'country')} />
           </div>
         </div>
 
         <div className="row">
         <div className="col-xs-6">
-            <Link to="/new-contact-step-1">
-              <RaisedButton 
-                label="Previous Step" 
-                primary={true} />           
-            </Link>
+            <RaisedButton 
+              label="Previous Step" 
+              primary={true}           
+              onClick={this.handlePreviousStep} />           
           </div>
           <div className="col-xs-6">
-            <Link to="/contacts">
-              <RaisedButton 
-                label="Save Contact" 
-                primary={true} />           
-            </Link>
+            <RaisedButton 
+              label="Save Contact" 
+              primary={true} 
+              onClick={this.handleSaveContact} />           
           </div>
         </div>
+
+        <Snackbar
+          open={this.state.snackbarOpen}
+          message="SUCCESS OR ERROR?"
+          autoHideDuration={3000}
+          onRequestClose={this.handleSnackbarClose} />
 
       </div>
     )
@@ -140,11 +175,13 @@ class ContactFormAddress extends React.Component {
 }
 
 ContactFormAddress.propTypes = {
-  // contactList: PropTypes.array
+  newContact: PropTypes.object.isRequired,
+  newContactAddedMessage: PropTypes.string
 }
 
 const mapStateToProps = (state) => ({
-  // contactList: state.contactsReducer.contactList
+  newContact: state.contactsReducer.newContact,
+  newContactAddedMessage: state.contactsReducer.newContactAddedMessage
 })
 
 const mapDispatchToProps = (dispatch) => {

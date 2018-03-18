@@ -25,7 +25,6 @@ class ContactFormUserInfo extends React.Component {
     }
   }
 
-
   componentDidMount() {
     console.log('componentDidMount')
   }  
@@ -33,6 +32,17 @@ class ContactFormUserInfo extends React.Component {
   handleChange = (prop, event, newValue) => {
     this.setState({ [prop]: newValue })
   }
+
+  handleNextStep = () => {
+    this.props.actions.newContactUserInfo(this.state)
+    this.props.history.push('/new-contact-step-2')
+  }
+  
+  handleCancel = () => {
+    this.props.actions.newContactCancel()
+    this.props.history.push('/contacts')
+  }
+  
 
   render() {
     return (
@@ -108,20 +118,23 @@ class ContactFormUserInfo extends React.Component {
         </div>
 
         <div className="row">
-          <div className="col-xs-12">
-            <Link to="/new-contact-step-2">
-              <RaisedButton 
-                label="Next Step" 
-                primary={true} />           
-            </Link>
+          <div className="col-xs-6">
+            <RaisedButton
+              label="Cancel" 
+              primary={true}
+              onClick={this.handleCancel} />           
+          </div>      
+          <div className="col-xs-6">
+            <RaisedButton
+              label="Next Step" 
+              primary={true}
+              onClick={this.handleNextStep} />           
           </div>
         </div>
-
 
       </div>
     ) 
   }
-
 }
 
 ContactFormUserInfo.propTypes = {

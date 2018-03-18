@@ -28,3 +28,32 @@ export const deleteContact = (contactId) => dispatch => {
     payload: api.deleteContact(contactId)
   })
 }
+
+export const newContactUserInfo = (contactUserInfo) => dispatch => {
+  dispatch({
+    type: types.NEW_CONTACT_USER_INFO,
+    payload: contactUserInfo
+  })
+}
+
+export const newContactAddress = (contactAddress) => dispatch => {
+  dispatch({
+    type: types.NEW_CONTACT_ADDRESS,
+    payload: contactAddress
+  })
+}
+
+export const newContactCancel = () => dispatch => {
+  dispatch({
+    type: types.NEW_CONTACT_CANCEL,
+    payload: null
+  })
+}
+
+export const clearNewContactAddedMessage = () => dispatch => {
+  dispatch({
+    type: types.CLEAR_NEW_CONTACT_ADDED_MESSAGE,
+    payload: null
+  })
+}
+
