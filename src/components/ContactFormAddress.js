@@ -190,7 +190,7 @@ class ContactFormAddress extends React.Component {
 
         <Snackbar
           open={this.state.snackbarOpen}
-          message="SUCCESS OR ERROR?"
+          message="SUCCESS"
           autoHideDuration={3000}
           onRequestClose={this.handleSnackbarClose} />
 
