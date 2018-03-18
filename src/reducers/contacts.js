@@ -6,7 +6,7 @@ const initialState = {
 
 const contactsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case types.GET_ALL_CONTACTS:
+    case `${types.GET_ALL_CONTACTS}_FULFILLED`:
       return {
         ...state,
         contactList: action.payload

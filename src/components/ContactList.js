@@ -11,27 +11,58 @@ class Contacts extends React.Component {
 
   componentDidMount() {
     console.log('componentDidMount')
-    console.log(this.props)
     this.props.actions.getAllContacts()
   }  
 
+  addContact = () => {
+    let someContact = { 
+      userInfo: { 
+        name: 'String',
+        cpf: '12345678901',
+        cnpj: '12345678901234',
+        gender: 'm',
+        website: 'String',
+        email: 'String',
+        telephone: 'String' 
+      },
+      address: { 
+        streetName: 'String',
+        streetNumber: 1,
+        neighborhood: 'String',
+        complement: 'String',
+        zip: '12345678',
+        city: 'String',
+        state: 'SP',
+        country: 'String' 
+      } 
+    }
+    this.props.actions.addContact(someContact)
+  }
+
   render() {
     return (
-      <h1>contacts Component</h1>
+      <div>
+        <h1>contacts Component</h1>
+        {
+          this.props.contactList.map(item => (
+            <p key={item.id}>{item.userInfo.name}</p>
+          ))
+        }        
+      </div>
     )
   }
 }
 
 
 Contacts.propTypes = {
-  contactList: PropTypes.any
+  contactList: PropTypes.array
 }
 
 const mapStateToProps = (state) => ({
   contactList: state.contactsReducer.contactList
 })
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = (dispatch) => {
 	return {
     actions: bindActionCreators({ getAllContacts }, dispatch)
   }
