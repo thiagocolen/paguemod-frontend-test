@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Route } from 'react-router-dom'
+import { Redirect } from 'react-router'
 import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import promiseMiddleware from 'redux-promise-middleware'
@@ -53,6 +54,7 @@ class App extends Component {
           <Provider store={store}>
             <BrowserRouter>
               <div>
+                <Route exact path="/" render={() => (<Redirect to="/contacts"/>) }/>
                 <Route path="/contacts" component={ContactList} />
                 <Route path="/new-contact-step-1" component={ContactFormUserInfo} />
                 <Route path="/new-contact-step-2" component={ContactFormAddress} />
