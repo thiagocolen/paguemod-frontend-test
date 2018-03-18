@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { getAllContacts } from '../actions'
+import * as contactActions from '../actions'
 
 class Contacts extends React.Component {
   constructor(props) {
@@ -12,12 +12,41 @@ class Contacts extends React.Component {
   componentDidMount() {
     console.log('componentDidMount')
     this.props.actions.getAllContacts()
+    // this.editContact()
+    // this.addContact()
+    // this.deleteContact()
   }  
 
-  addContact = () => {
+  deleteContact () {
     let someContact = { 
       userInfo: { 
-        name: 'String',
+        name: 'EditedStringAgain',
+        cpf: '12345678901',
+        cnpj: '12345678901234',
+        gender: 'm',
+        website: 'String',
+        email: 'String',
+        telephone: 'String' 
+      },
+      address: { 
+        streetName: 'String',
+        streetNumber: 1,
+        neighborhood: 'String',
+        complement: 'String',
+        zip: '12345678',
+        city: 'String',
+        state: 'SP',
+        country: 'String' 
+      },
+      id:"-L7qkHyzMTvIkeWy48mU"
+    }
+    this.props.actions.deleteContact(someContact.id)  
+  }
+
+  addContact () {
+    let someContact = { 
+      userInfo: { 
+        name: 'NewString',
         cpf: '12345678901',
         cnpj: '12345678901234',
         gender: 'm',
@@ -37,6 +66,32 @@ class Contacts extends React.Component {
       } 
     }
     this.props.actions.addContact(someContact)
+  }
+
+  editContact () {
+    let someContact = { 
+      userInfo: { 
+        name: 'EditedStringAgain',
+        cpf: '12345678901',
+        cnpj: '12345678901234',
+        gender: 'm',
+        website: 'String',
+        email: 'String',
+        telephone: 'String' 
+      },
+      address: { 
+        streetName: 'String',
+        streetNumber: 1,
+        neighborhood: 'String',
+        complement: 'String',
+        zip: '12345678',
+        city: 'String',
+        state: 'SP',
+        country: 'String' 
+      },
+      id:"-L7qkHyzMTvIkeWy48mU" 
+    }
+    this.props.actions.editContact(someContact, someContact.id)  
   }
 
   render() {
@@ -64,7 +119,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-    actions: bindActionCreators({ getAllContacts }, dispatch)
+    actions: bindActionCreators({ ...contactActions }, dispatch)
   }
 }
 

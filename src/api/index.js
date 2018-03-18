@@ -11,30 +11,66 @@ var myAxios = axios.create({
   }
 })
 
-export default {
 
-  getAllContacts: () => {
+
+
+
+class Api {
+
+  static getAllContacts () {
     return new Promise((resolve, reject) => {
       myAxios.get('/contacts')
-        .then(function (response) {
+        .then((response) => {
           resolve(response.data) 
-        })
-        .catch(function (error) {
+        })   
+        .catch((error) => {
           reject(error)
         })
     }) 
-  },
+  }
 
-  postContact: (contact) => {
+  static postContact (contact) {
     return new Promise((resolve, reject) => {
       myAxios.post('/contacts', contact)
-        .then(function (response) {
-          resolve(response.data) 
+        .then(() => {
+          this.getAllContacts().then(response => {
+            resolve(response)
+          })  
         })
-        .catch(function (error) {
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  }  
+
+  static putContact (contact, contactId) {
+    return new Promise((resolve, reject) => {
+      myAxios.put('/contacts/' + contactId, contact)
+        .then(() => {
+          this.getAllContacts().then(response => {
+            resolve(response)
+          }) 
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  }
+
+  static deleteContact (contactId) {
+    return new Promise((resolve, reject) => {
+      myAxios.delete('/contacts/' + contactId)
+        .then(() => {
+          this.getAllContacts().then(response => {
+            resolve(response)
+          }) 
+        })
+        .catch((error) => {
           reject(error)
         })
     })
   }
 
 }
+
+export default Api
