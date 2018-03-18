@@ -2,9 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import BootstrapTable from 'react-bootstrap-table-next'
 import * as contactActions from '../actions'
 
 class Contacts extends React.Component {
+  // eslint-disable-next-line
   constructor(props) {
     super(props)
   }
@@ -96,18 +98,42 @@ class Contacts extends React.Component {
 
   render() {
     return (
-      <div>
-        <h1>contacts Component</h1>
-        {
-          this.props.contactList.map(item => (
-            <p key={item.id}>{item.userInfo.name}</p>
-          ))
-        }        
+      <div class="container">
+
+        <div class="row">
+          <div class="col-md-12">
+            <h1>contacts Component</h1>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <BootstrapTable 
+              keyField='id' 
+              data={ this.props.contactList } 
+              columns={ contacTableColumns }
+              striped
+              hover
+              condensed />
+          </div>
+        </div>
+
       </div>
     )
   }
 }
 
+const contacTableColumns = [{
+  dataField: 'id',
+  text: 'ID',
+  hidden: true
+}, {
+  dataField: 'userInfo.name',
+  text: 'Name'
+}, {
+  dataField: 'address.streetName',
+  text: 'Address'
+}]
 
 Contacts.propTypes = {
   contactList: PropTypes.array

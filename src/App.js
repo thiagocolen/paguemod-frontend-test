@@ -7,6 +7,9 @@ import { createLogger } from 'redux-logger'
 import promiseMiddleware from 'redux-promise-middleware'
 import rootReducer from './reducers'
 import ContactList from './components/ContactList'
+
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
 import './App.css'
 
 
