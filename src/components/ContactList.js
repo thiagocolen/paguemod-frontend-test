@@ -2,8 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+
 import BootstrapTable from 'react-bootstrap-table-next'
+import RaisedButton from 'material-ui/RaisedButton'
+import { Link } from 'react-router-dom'
+
 import * as contactActions from '../actions'
+
 
 class Contacts extends React.Component {
   // eslint-disable-next-line
@@ -98,16 +103,26 @@ class Contacts extends React.Component {
 
   render() {
     return (
-      <div class="container">
+      <div className="container">
 
-        <div class="row">
-          <div class="col-md-12">
+        <div className="row">
+          <div className="col-xs-12">
             <h1>contacts Component</h1>
           </div>
         </div>
 
-        <div class="row">
-          <div class="col-md-12">
+        <div className="row">
+          <div className="col-xs-3 col-xs-offset-9">
+            <Link to="/new-contact-step-1">
+              <RaisedButton 
+                label="New Contact" 
+                primary={true} />           
+            </Link>
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-xs-12">
             <BootstrapTable 
               keyField='id' 
               data={ this.props.contactList } 
