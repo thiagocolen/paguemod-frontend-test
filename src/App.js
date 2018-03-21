@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { BrowserRouter, Route, withRouter } from 'react-router-dom'
 import { Redirect } from 'react-router'
 import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
@@ -18,6 +18,7 @@ import rootReducer from './reducers'
 import ContactList from './components/ContactList'
 import ContactFormUserInfo from './components/ContactFormUserInfo'
 import ContactFormAddress from './components/ContactFormAddress'
+import Login from './components/Login'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
@@ -37,6 +38,53 @@ let store = createStore(
   )
 )
 
+const fakeAuth = {
+  isAuthenticated: false,
+  authenticate(cb) {
+    this.isAuthenticated = true
+    setTimeout(cb, 100)
+  },
+  signout(cb) {
+    this.isAuthenticated = false
+    setTimeout(cb, 100)
+  }
+}
+
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={props =>
+      fakeAuth.isAuthenticated ? (
+        <Component {...props} />
+      ) : (
+        <Redirect
+          to={{
+            pathname: "/login",
+            state: { from: props.location }
+          }}
+        />
+      )
+    }
+  />
+)
+
+const AuthButton = withRouter(
+  ({ history }) =>
+    fakeAuth.isAuthenticated ? (
+      <p>
+        Welcome!{" "}
+        <button
+          onClick={() => {
+            fakeAuth.signout(() => history.push("/"))
+          }}
+        >
+          Sign out
+        </button>
+      </p>
+    ) : (
+      <p>You are not logged in.</p>
+    )
+)
 
 class App extends Component {
   render() {
@@ -54,12 +102,14 @@ class App extends Component {
           <Provider store={store}>
             <BrowserRouter>
               <div>
-                <Route exact path="/" render={() => (<Redirect to="/contacts"/>) }/>
-                <Route path="/contacts" component={ContactList} />
-                <Route path="/new-contact-step-1" component={ContactFormUserInfo} />
-                <Route path="/new-contact-step-2" component={ContactFormAddress} />
-                <Route path="/edit-contact-step-1/:id" component={ContactFormUserInfo} />
-                <Route path="/edit-contact-step-2/:id" component={ContactFormAddress} />
+                <AuthButton />
+                <Route exact path="/" render={() => (<Redirect to="/contacts"/>) }/>                
+                <Route path="/login" render={(props) => (<Login {...props} fakeAuth={fakeAuth}/>)} />                
+                <PrivateRoute path="/contacts" component={ContactList} />
+                <PrivateRoute path="/new-contact-step-1" component={ContactFormUserInfo} />
+                <PrivateRoute path="/new-contact-step-2" component={ContactFormAddress} />
+                <PrivateRoute path="/edit-contact-step-1/:id" component={ContactFormUserInfo} />
+                <PrivateRoute path="/edit-contact-step-2/:id" component={ContactFormAddress} />
               </div>
             </BrowserRouter>
           </Provider>
