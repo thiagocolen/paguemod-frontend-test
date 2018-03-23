@@ -45,11 +45,11 @@ class ContactFormAddress extends React.Component {
     if (nextProps.newContactAddedMessage === 'ADDRESS_ADDED') {
 
       if (this.props.match.path === '/edit-contact-step-2/:id') {
-        this.props.actions.editContact(nextProps.newContact, nextProps.newContact.id)
+        this.props.actions.editContact(nextProps.newContact, nextProps.newContact.id, this.props.auth)
         return
       }
   
-      this.props.actions.addContact(nextProps.newContact)
+      this.props.actions.addContact(nextProps.newContact, this.props.auth)
       return
     }
 
@@ -200,11 +200,13 @@ class ContactFormAddress extends React.Component {
 }
 
 ContactFormAddress.propTypes = {
+  auth: PropTypes.object,
   newContact: PropTypes.object.isRequired,
   newContactAddedMessage: PropTypes.string
 }
 
 const mapStateToProps = (state) => ({
+  auth: state.authReducer,
   contactList: state.contactsReducer.contactList,  
   newContact: state.contactsReducer.newContact,
   newContactAddedMessage: state.contactsReducer.newContactAddedMessage

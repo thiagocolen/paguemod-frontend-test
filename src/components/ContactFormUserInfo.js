@@ -33,7 +33,7 @@ class ContactFormUserInfo extends React.Component {
       this.props.match.path === '/edit-contact-step-1/:id' &&
       this.props.newContact.id === undefined
     ) {
-      this.props.actions.getAllContacts()
+      this.props.actions.getAllContacts(this.props.auth)
       return
     }
 
@@ -184,10 +184,12 @@ class ContactFormUserInfo extends React.Component {
 }
 
 ContactFormUserInfo.propTypes = {
+  auth: PropTypes.object,
   contactList: PropTypes.array
 }
 
 const mapStateToProps = (state) => ({
+  auth: state.authReducer,  
   contactList: state.contactsReducer.contactList,
   newContact: state.contactsReducer.newContact
 })

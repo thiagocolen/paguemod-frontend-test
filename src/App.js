@@ -25,6 +25,8 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
 import './App.css'
 
+import axios from 'axios'
+
 
 const loggerMiddleware = createLogger()
 
@@ -40,9 +42,24 @@ let store = createStore(
 
 const fakeAuth = {
   isAuthenticated: false,
-  authenticate(cb) {
-    this.isAuthenticated = true
-    setTimeout(cb, 100)
+  authenticate(cb, username, password) {
+
+    axios.get('/auth', {
+        auth: {
+          username: username,
+          password: password
+        },
+        baseURL: 'https://cors-anywhere.herokuapp.com/https://paguemob-interview-environment.firebaseapp.com',
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then((response) => {   
+        this.isAuthenticated = true
+        setTimeout(cb, 100) 
+      })   
+      .catch((error) => {
+        this.isAuthenticated = false
+        setTimeout(cb, 100)    
+      })
   },
   signout(cb) {
     this.isAuthenticated = false

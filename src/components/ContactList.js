@@ -21,7 +21,7 @@ class Contacts extends React.Component {
 
   componentDidMount() {
     console.log('componentDidMount')
-    this.props.actions.getAllContacts()
+    this.props.actions.getAllContacts(this.props.auth)
     // this.editContact()
     // this.addContact()
     // this.deleteContact()
@@ -32,7 +32,7 @@ class Contacts extends React.Component {
   
     if (nextProps.newContactAddedMessage === 'DELETED_CONTACT') {
       this.props.actions.clearNewContactAddedMessage()    
-      this.props.actions.getAllContacts()
+      this.props.actions.getAllContacts(this.props.auth)
     }
   }
 
@@ -59,7 +59,7 @@ class Contacts extends React.Component {
       },
       id:"-L7qkHyzMTvIkeWy48mU"
     }
-    this.props.actions.deleteContact(someContact.id)  
+    this.props.actions.deleteContact(someContact.id, this.props.auth)  
   }
 
   addContact () {
@@ -84,7 +84,7 @@ class Contacts extends React.Component {
         country: 'String' 
       } 
     }
-    this.props.actions.addContact(someContact)
+    this.props.actions.addContact(someContact, this.props.auth)
   }
 
   editContact () {
@@ -110,7 +110,7 @@ class Contacts extends React.Component {
       },
       id:"-L7qkHyzMTvIkeWy48mU" 
     }
-    this.props.actions.editContact(someContact, someContact.id)  
+    this.props.actions.editContact(someContact, someContact.id, this.props.auth)  
   }
 
   actionButtons = (cell, row, rowIndex) => {
@@ -141,7 +141,7 @@ class Contacts extends React.Component {
   }
 
   handleDeleteContact = (id) => {
-    this.props.actions.deleteContact(id)
+    this.props.actions.deleteContact(id, this.props.auth)
   }
 
   render() {
@@ -184,11 +184,13 @@ class Contacts extends React.Component {
 
 
 Contacts.propTypes = {
+  auth: PropTypes.object,
   contactList: PropTypes.array,
   newContactAddedMessage: PropTypes.string
 }
 
 const mapStateToProps = (state) => ({
+  auth: state.authReducer,
   contactList: state.contactsReducer.contactList,
   newContactAddedMessage: state.contactsReducer.newContactAddedMessage
 })

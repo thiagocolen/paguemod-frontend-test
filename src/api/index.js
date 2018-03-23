@@ -1,34 +1,24 @@
 import axios from 'axios'
 
-var myAxios = axios.create({
-  auth: {
-    username: 'thiago.souzacolen@gmail.com',
-    password: 'paguemob249'
-  },
-  baseURL: 'https://cors-anywhere.herokuapp.com/https://paguemob-interview-environment.firebaseapp.com',
-  headers: {
-    'Content-Type': 'application/json'
-  }
-})
 
 
 class Api {
 
-  static getAllContacts () {
+  static getAllContacts (auth) {
     return new Promise((resolve, reject) => {
-      myAxios.get('/contacts')
+      axios.get('/contacts', auth)
         .then((response) => {
           resolve(response.data) 
-        })   
+        })
         .catch((error) => {
           reject(error)
         })
     }) 
   }
 
-  static postContact (contact) {
+  static postContact (contact, auth) {
     return new Promise((resolve, reject) => {
-      myAxios.post('/contacts', contact)
+      axios.post('/contacts', contact, auth)
         .then(() => {
           resolve()
         })
@@ -38,9 +28,9 @@ class Api {
     })
   }  
 
-  static putContact (contact, contactId) {
+  static putContact (contact, contactId, auth) {
     return new Promise((resolve, reject) => {
-      myAxios.put('/contacts/' + contactId, contact)
+      axios.put('/contacts/' + contactId, contact, auth)
         .then(() => {
           resolve()
         })
@@ -50,9 +40,9 @@ class Api {
     })
   }
 
-  static deleteContact (contactId) {
+  static deleteContact (contactId, auth) {
     return new Promise((resolve, reject) => {
-      myAxios.delete('/contacts/' + contactId)
+      axios.delete('/contacts/' + contactId, auth)
         .then(() => {
           resolve()
         })
