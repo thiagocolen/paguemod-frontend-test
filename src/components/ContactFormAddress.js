@@ -16,6 +16,16 @@ class ContactFormAddress extends React.Component {
     super(props)
     this.state = {
       snackbarOpen: false,
+      errorMessages: {
+        streetName: '',
+        streetNumber: '',
+        neighborhood: '',
+        complement: '',
+        zip: '',
+        city: '',
+        state: '',
+        country: '' 
+      },
       address: {
         streetName: '',
         streetNumber: '',
@@ -93,13 +103,69 @@ class ContactFormAddress extends React.Component {
   }
 
   formValidation = () => {
-    if (this.state.address.streetName === '') { return false }
-    if (this.state.address.streetNumber === '') { return false }
-    if (this.state.address.neighborhood === '') { return false }
-    if (this.state.address.zip.length < 8) { return false }
-    if (this.state.address.city === '') { return false }
-    if (this.state.address.state.length !== 2) { return false }
-    if (this.state.address.country === '') { return false }
+    let requiredFieldMessage = 'Campo obrigatório. '
+    let errorMessages = {}
+    
+    if (this.state.address.streetName === '') { 
+      errorMessages.streetName = requiredFieldMessage
+    }
+
+    if (
+      Number(this.state.address.streetNumber) === 0 ||
+      isNaN(Number(this.state.address.streetNumber))
+    ) {
+      errorMessages.streetNumber = `${requiredFieldMessage}O Street Number precisa ser um número.`
+    }
+    
+    if (this.state.address.neighborhood === '') { 
+      errorMessages.neighborhood = requiredFieldMessage
+    }
+
+    if (this.state.address.zip.length < 8) { 
+      errorMessages.zip = `${requiredFieldMessage}O ZipCode deve ter pelo menos 8 caracteres.`
+    }
+
+    if (this.state.address.city === '') { 
+      errorMessages.city = requiredFieldMessage      
+    }
+
+    if (this.state.address.state.length !== 2) { 
+      errorMessages.state = `${requiredFieldMessage}O State deve ter 2 caracteres.`         
+    }
+
+    if (this.state.address.country === '') { 
+      errorMessages.country = requiredFieldMessage                  
+    }
+
+    if (Object.keys(errorMessages).length !== 0) {
+      this.setState({
+        errorMessages: {
+          streetName: errorMessages.streetName,
+          streetNumber: errorMessages.streetNumber,
+          neighborhood: errorMessages.neighborhood,
+          complement: errorMessages.complement,
+          zip: errorMessages.zip,
+          city: errorMessages.city,
+          state: errorMessages.state,
+          country: errorMessages.country    
+        }
+      })
+      return false
+    }
+
+    this.setState({
+      errorMessages: {
+        streetName: '',
+        streetNumber: '',
+        neighborhood: '',
+        complement: '',
+        zip: '',
+        city: '',
+        state: '',
+        country: ''    
+      }
+    })
+
     return true
   }
 
@@ -119,7 +185,8 @@ class ContactFormAddress extends React.Component {
             <TextField
               floatingLabelText="Street Name"
               value={this.state.address.streetName}
-              onChange={this.handleChange.bind(this, 'streetName')} />
+              onChange={this.handleChange.bind(this, 'streetName')}
+              errorText={this.state.errorMessages.streetName} />
           </div>
         </div>
 
@@ -128,7 +195,8 @@ class ContactFormAddress extends React.Component {
             <TextField
               floatingLabelText="Street Number"
               value={this.state.address.streetNumber}
-              onChange={this.handleChange.bind(this, 'streetNumber')} />
+              onChange={this.handleChange.bind(this, 'streetNumber')}
+              errorText={this.state.errorMessages.streetNumber} />
           </div>
         </div>
 
@@ -137,7 +205,8 @@ class ContactFormAddress extends React.Component {
             <TextField
               floatingLabelText="Neighborhood"
               value={this.state.address.neighborhood}
-              onChange={this.handleChange.bind(this, 'neighborhood')} />
+              onChange={this.handleChange.bind(this, 'neighborhood')}
+              errorText={this.state.errorMessages.neighborhood} />
           </div>
         </div>
 
@@ -146,7 +215,8 @@ class ContactFormAddress extends React.Component {
             <TextField
               floatingLabelText="Complement"
               value={this.state.address.complement}
-              onChange={this.handleChange.bind(this, 'complement')} />
+              onChange={this.handleChange.bind(this, 'complement')}
+              errorText={this.state.errorMessages.complement} />
           </div>
         </div>
 
@@ -155,7 +225,8 @@ class ContactFormAddress extends React.Component {
             <TextField
               floatingLabelText="Zip"
               value={this.state.address.zip}
-              onChange={this.handleChange.bind(this, 'zip')} />
+              onChange={this.handleChange.bind(this, 'zip')}
+              errorText={this.state.errorMessages.zip} />
           </div>
         </div>
 
@@ -164,7 +235,8 @@ class ContactFormAddress extends React.Component {
             <TextField
               floatingLabelText="City"
               value={this.state.address.city}
-              onChange={this.handleChange.bind(this, 'city')} />
+              onChange={this.handleChange.bind(this, 'city')}
+              errorText={this.state.errorMessages.city} />
           </div>
         </div>
 
@@ -173,7 +245,8 @@ class ContactFormAddress extends React.Component {
             <TextField
               floatingLabelText="State"
               value={this.state.address.state}
-              onChange={this.handleChange.bind(this, 'state')} />
+              onChange={this.handleChange.bind(this, 'state')}
+              errorText={this.state.errorMessages.state} />
           </div>
         </div>
 
@@ -182,7 +255,8 @@ class ContactFormAddress extends React.Component {
             <TextField
               floatingLabelText="Country"
               value={this.state.address.country}
-              onChange={this.handleChange.bind(this, 'country')} />
+              onChange={this.handleChange.bind(this, 'country')}
+              errorText={this.state.errorMessages.country} />
           </div>
         </div>
 

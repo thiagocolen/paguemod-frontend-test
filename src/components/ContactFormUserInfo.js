@@ -13,11 +13,20 @@ import * as contactActions from '../actions'
 
 
 class ContactFormUserInfo extends React.Component {
-  // eslint-disable-next-line
   constructor(props) {
     super(props)
     this.state = {
       pessoa: '',
+      errorMessages: {
+        pessoa: '',
+        name: '',
+        cpf: '',
+        cnpj: '',
+        gender: '',
+        website: '',
+        email: '',
+        telephone: '' 
+      },
       userInfo: {
         name: '',
         cpf: '',
@@ -136,10 +145,25 @@ class ContactFormUserInfo extends React.Component {
   }
 
   formValidation = () => {
-    if (this.state.userInfo.name === '') { return false }
-    if (this.state.userInfo.email === '') { return false }
-    if (this.state.userInfo.telephone === '') { return false }
-    if (this.state.pessoa === '') { return false }
+    let requiredFieldMessage = 'Campo obrigatório. '
+    let errorMessages = {}
+    
+    if (this.state.userInfo.email === '') {
+      errorMessages.email = requiredFieldMessage
+    }
+    
+    if (this.state.userInfo.name === '') { 
+      errorMessages.name = requiredFieldMessage
+    }
+
+    if (this.state.userInfo.telephone === '') { 
+      errorMessages.telephone = requiredFieldMessage
+    }
+
+    if (this.state.pessoa === '') { 
+      errorMessages.pessoa = requiredFieldMessage
+    }
+
     if ( (
         this.state.pessoa === 'pf' &&
         this.state.userInfo.cpf.length !== 11 ||
@@ -148,7 +172,47 @@ class ContactFormUserInfo extends React.Component {
         this.state.pessoa === 'pj' &&
         this.state.userInfo.cnpj.length !== 14 ||
         this.state.userInfo.website === ''
-      ) ) { return false }
+      ) ) {
+        if (this.state.pessoa === 'pf') {
+          errorMessages.cpf = `${requiredFieldMessage}O CPF deve conter 11 caracteres.`
+          errorMessages.gender = requiredFieldMessage
+        } 
+
+        if (this.state.pessoa === 'pj') {
+          errorMessages.cnpj = `${requiredFieldMessage}O CNPJ deve conter 14 caracteres.`
+          errorMessages.website = requiredFieldMessage
+        }
+      }
+
+    if (Object.keys(errorMessages).length !== 0) {
+      this.setState({
+        errorMessages: {
+          pessoa: errorMessages.pessoa,
+          name: errorMessages.name,
+          cpf: errorMessages.cpf,
+          cnpj: errorMessages.cnpj,
+          gender: errorMessages.gender,
+          website: errorMessages.website,
+          email: errorMessages.email,
+          telephone: errorMessages.telephone         
+        }
+      })
+      return false
+    }
+
+    this.setState({
+      errorMessages: {
+        pessoa: '',
+        name: '',
+        cpf: '',
+        cnpj: '',
+        gender: '',
+        website: '',
+        email: '',
+        telephone: ''         
+      }
+    })
+
     return true
   }
 
@@ -167,7 +231,8 @@ class ContactFormUserInfo extends React.Component {
             <TextField
               floatingLabelText="Name"
               value={this.state.userInfo.name}
-              onChange={this.handleTextFieldChange.bind(this, 'name')}  />
+              onChange={this.handleTextFieldChange.bind(this, 'name')}
+              errorText={this.state.errorMessages.name}  />
           </div>
         </div>
         
@@ -176,7 +241,8 @@ class ContactFormUserInfo extends React.Component {
             <TextField
               floatingLabelText="e-mail"
               value={this.state.userInfo.email}
-              onChange={this.handleTextFieldChange.bind(this, 'email')} />
+              onChange={this.handleTextFieldChange.bind(this, 'email')}
+              errorText={this.state.errorMessages.email} />
           </div>
         </div>
 
@@ -185,16 +251,20 @@ class ContactFormUserInfo extends React.Component {
             <TextField
               floatingLabelText="Telephone"
               value={this.state.userInfo.telephone}
-              onChange={this.handleTextFieldChange.bind(this, 'telephone')} />
+              onChange={this.handleTextFieldChange.bind(this, 'telephone')}
+              errorText={this.state.errorMessages.telephone} />
           </div>
         </div>
 
         <div className="row">
           <div className="col-xs-12">
-            <RadioButtonGroup name="shipSpeed" onChange={this.handleRadioChange}>
+            <RadioButtonGroup name='genderRadioButtonGroup' onChange={this.handleRadioChange}>
               <RadioButton value="pf" label="Pessoa Física" />
               <RadioButton value="pj" label="Pessoa Jurídica" />
             </RadioButtonGroup>
+            { this.state.errorMessages.pessoa ?
+              <h6 style={{color: 'red'}}>{this.state.errorMessages.pessoa}</h6>
+            : ''}
           </div>
         </div>
 
@@ -204,7 +274,8 @@ class ContactFormUserInfo extends React.Component {
             <TextField
               floatingLabelText="CPF"
               value={this.state.userInfo.cpf}
-              onChange={this.handleTextFieldChange.bind(this, 'cpf')} />
+              onChange={this.handleTextFieldChange.bind(this, 'cpf')}
+              errorText={this.state.errorMessages.cpf} />
           ) : '' }
           </div>
         </div>
@@ -215,7 +286,8 @@ class ContactFormUserInfo extends React.Component {
             <TextField
               floatingLabelText="CNPJ"
               value={this.state.userInfo.cnpj}
-              onChange={this.handleTextFieldChange.bind(this, 'cnpj')} />
+              onChange={this.handleTextFieldChange.bind(this, 'cnpj')}
+              errorText={this.state.errorMessages.cnpj} />
           ) : '' }
           </div>
         </div>
@@ -228,7 +300,8 @@ class ContactFormUserInfo extends React.Component {
               <SelectField
                 floatingLabelText="Gender"
                 value={this.state.userInfo.gender}
-                onChange={this.handleSelectFieldChange.bind(this, 'gender')}>
+                onChange={this.handleSelectFieldChange.bind(this, 'gender')}
+                errorText={this.state.errorMessages.gender} >
                 <MenuItem value={'m'} primaryText="Masculino" />
                 <MenuItem value={'f'} primaryText="Feminino" />
               </SelectField>
@@ -242,7 +315,8 @@ class ContactFormUserInfo extends React.Component {
             <TextField
               floatingLabelText="Website"
               value={this.state.userInfo.website}
-              onChange={this.handleTextFieldChange.bind(this, 'website')} />
+              onChange={this.handleTextFieldChange.bind(this, 'website')}
+              errorText={this.state.errorMessages.website} />
           ) : '' }
           </div>
         </div>
