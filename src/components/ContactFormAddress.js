@@ -87,7 +87,20 @@ class ContactFormAddress extends React.Component {
   }
 
   handleSaveContact = () => {
-    this.props.actions.newContactAddress(this.state.address)
+    if (this.formValidation()) {
+      this.props.actions.newContactAddress(this.state.address)
+    }
+  }
+
+  formValidation = () => {
+    if (this.state.address.streetName === '') { return false }
+    if (this.state.address.streetNumber === '') { return false }
+    if (this.state.address.neighborhood === '') { return false }
+    if (this.state.address.zip.length < 8) { return false }
+    if (this.state.address.city === '') { return false }
+    if (this.state.address.state.length !== 2) { return false }
+    if (this.state.address.country === '') { return false }
+    return true
   }
 
   render() {

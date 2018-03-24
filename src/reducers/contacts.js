@@ -18,6 +18,41 @@ const initialState = {
   newContactAddedMessage: ''
 }
 
+const newContactUserInfo = (state, payload) => {
+  console.log('newContactUserInfo', payload)
+  if (payload.pessoa === 'pf') {
+    return {
+      ...state,
+      newContact: {
+        ...state.newContact,
+        userInfo: {
+          name: payload.userInfo.name,
+          cpf: payload.userInfo.cpf,
+          gender: payload.userInfo.gender,
+          email: payload.userInfo.email,
+          telephone: payload.userInfo.telephone 
+        }
+      }
+    }
+  }
+
+  if (payload.pessoa === 'pj') {
+    return {
+      ...state,
+      newContact: {
+        ...state.newContact,
+        userInfo: {
+          name: payload.userInfo.name,
+          cnpj: payload.userInfo.cnpj,
+          website: payload.userInfo.website,
+          email: payload.userInfo.email,
+          telephone: payload.userInfo.telephone 
+        }
+      }
+    }
+  }  
+}
+
 const contactsReducer = (state = initialState, action) => {
   switch (action.type) {
 
@@ -60,13 +95,7 @@ const contactsReducer = (state = initialState, action) => {
       }
       
     case types.NEW_CONTACT_USER_INFO: 
-      return {
-        ...state,
-        newContact: {
-          ...state.newContact,
-          userInfo: action.payload
-        }
-      }
+      return newContactUserInfo(state, action.payload)
 
     case types.NEW_CONTACT_ADDRESS: 
       return {

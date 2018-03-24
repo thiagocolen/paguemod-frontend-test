@@ -5,7 +5,9 @@ import { bindActionCreators } from 'redux'
 
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
-import { Link } from 'react-router-dom'
+import SelectField from 'material-ui/SelectField'
+import MenuItem from 'material-ui/MenuItem'
+import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
 
 import * as contactActions from '../actions'
 
@@ -15,6 +17,7 @@ class ContactFormUserInfo extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      pessoa: '',
       userInfo: {
         name: '',
         cpf: '',
@@ -66,7 +69,7 @@ class ContactFormUserInfo extends React.Component {
     }
   }
 
-  handleChange = (prop, event, newValue) => {
+  handleTextFieldChange = (prop, event, newValue) => {
     this.setState({ 
       userInfo: { 
         ...this.state.userInfo,
@@ -75,20 +78,79 @@ class ContactFormUserInfo extends React.Component {
     })
   }
 
-  handleNextStep = () => {
-    this.props.actions.newContactUserInfo(this.state.userInfo)
-    if (this.props.match.path === '/edit-contact-step-1/:id') { 
-      this.props.history.push('/edit-contact-step-2/' + this.props.match.params.id)
-      return     
+  handleSelectFieldChange = (prop, event, key, newValue) => {
+    this.setState({ 
+      userInfo: { 
+        ...this.state.userInfo,
+        [prop]: newValue 
+      } 
+    })
+  }
+
+  handleRadioChange = (event, newValue) => {
+    this.setState({ 
+      pessoa: newValue,
+      userInfo: { 
+        ...this.state.userInfo,
+      } 
+    })
+
+    if (newValue === 'pf') {
+      this.setState({ 
+        pessoa: newValue,
+        userInfo: { 
+          ...this.state.userInfo,
+          cnpj: '',
+          website: '',
+        } 
+      })  
     }
-    this.props.history.push('/new-contact-step-2')
+
+    if (newValue === 'pj') {
+      this.setState({ 
+        pessoa: newValue,
+        userInfo: { 
+          ...this.state.userInfo,
+          cpf: '',
+          gender: '',
+        } 
+      })  
+    }
+  }
+
+  handleNextStep = () => {
+    if (this.formValidation()) {
+      this.props.actions.newContactUserInfo(this.state)
+  
+      if (this.props.match.path === '/edit-contact-step-1/:id') { 
+        this.props.history.push('/edit-contact-step-2/' + this.props.match.params.id)
+        return     
+      }
+      this.props.history.push('/new-contact-step-2')
+    }
   }
   
   handleCancel = () => {
     this.props.actions.newContactCancel()
     this.props.history.push('/contacts')
   }
-  
+
+  formValidation = () => {
+    if (this.state.userInfo.name === '') { return false }
+    if (this.state.userInfo.email === '') { return false }
+    if (this.state.userInfo.telephone === '') { return false }
+    if (this.state.pessoa === '') { return false }
+    if ( (
+        this.state.pessoa === 'pf' &&
+        this.state.userInfo.cpf.length !== 11 ||
+        this.state.userInfo.gender === ''
+      ) && (
+        this.state.pessoa === 'pj' &&
+        this.state.userInfo.cnpj.length !== 14 ||
+        this.state.userInfo.website === ''
+      ) ) { return false }
+    return true
+  }
 
   render() {
     return (
@@ -105,52 +167,16 @@ class ContactFormUserInfo extends React.Component {
             <TextField
               floatingLabelText="Name"
               value={this.state.userInfo.name}
-              onChange={this.handleChange.bind(this, 'name')}  />
+              onChange={this.handleTextFieldChange.bind(this, 'name')}  />
           </div>
         </div>
-
-        <div className="row">
-          <div className="col-xs-12">
-            <TextField
-              floatingLabelText="CPF"
-              value={this.state.userInfo.cpf}
-              onChange={this.handleChange.bind(this, 'cpf')} />
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-xs-12">
-            <TextField
-              floatingLabelText="CNPJ"
-              value={this.state.userInfo.cnpj}
-              onChange={this.handleChange.bind(this, 'cnpj')} />
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-xs-12">
-            <TextField
-              floatingLabelText="Gender"
-              value={this.state.userInfo.gender}
-              onChange={this.handleChange.bind(this, 'gender')} />
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-xs-12">
-            <TextField
-              floatingLabelText="Website"
-              value={this.state.userInfo.website}
-              onChange={this.handleChange.bind(this, 'website')} />
-          </div>
-        </div>
-
+        
         <div className="row">
           <div className="col-xs-12">
             <TextField
               floatingLabelText="e-mail"
               value={this.state.userInfo.email}
-              onChange={this.handleChange.bind(this, 'email')} />
+              onChange={this.handleTextFieldChange.bind(this, 'email')} />
           </div>
         </div>
 
@@ -159,7 +185,65 @@ class ContactFormUserInfo extends React.Component {
             <TextField
               floatingLabelText="Telephone"
               value={this.state.userInfo.telephone}
-              onChange={this.handleChange.bind(this, 'telephone')} />
+              onChange={this.handleTextFieldChange.bind(this, 'telephone')} />
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-xs-12">
+            <RadioButtonGroup name="shipSpeed" onChange={this.handleRadioChange}>
+              <RadioButton value="pf" label="Pessoa Física" />
+              <RadioButton value="pj" label="Pessoa Jurídica" />
+            </RadioButtonGroup>
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-xs-12">
+          { this.state.pessoa === 'pf' ? (
+            <TextField
+              floatingLabelText="CPF"
+              value={this.state.userInfo.cpf}
+              onChange={this.handleTextFieldChange.bind(this, 'cpf')} />
+          ) : '' }
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-xs-12">
+          { this.state.pessoa === 'pj' ? (          
+            <TextField
+              floatingLabelText="CNPJ"
+              value={this.state.userInfo.cnpj}
+              onChange={this.handleTextFieldChange.bind(this, 'cnpj')} />
+          ) : '' }
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-xs-12">
+            {/* valores 'm' e 'f' estão 'hardcoded', 
+            isso não é bom, seria melhor se viessem da API */}
+            { this.state.pessoa === 'pf' ? (
+              <SelectField
+                floatingLabelText="Gender"
+                value={this.state.userInfo.gender}
+                onChange={this.handleSelectFieldChange.bind(this, 'gender')}>
+                <MenuItem value={'m'} primaryText="Masculino" />
+                <MenuItem value={'f'} primaryText="Feminino" />
+              </SelectField>
+            ) : '' }
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-xs-12">
+          { this.state.pessoa === 'pj' ? (          
+            <TextField
+              floatingLabelText="Website"
+              value={this.state.userInfo.website}
+              onChange={this.handleTextFieldChange.bind(this, 'website')} />
+          ) : '' }
           </div>
         </div>
 
