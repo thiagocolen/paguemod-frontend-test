@@ -4,9 +4,13 @@ import axios from 'axios'
 
 class Api {
 
-  static getAllContacts (auth) {
+  // Esta paginação pela API não está sendo usada porque eu precisaria
+  // do meta dado 'total de registros' na resposta da API para poder
+  // calcular o número total de páginas, então estou fazendo 
+  // uma paginção apenas no front-end 
+  static getAllContacts (auth, sizePerPage, page) {
     return new Promise((resolve, reject) => {
-      axios.get('/contacts', auth)
+      axios.get(`/contacts?page=${page}&size=${sizePerPage}`, auth)
         .then((response) => {
           resolve(response.data) 
         })

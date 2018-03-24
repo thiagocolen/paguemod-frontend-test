@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux'
 
 import { Link } from 'react-router-dom' //todo: remove this
 import BootstrapTable from 'react-bootstrap-table-next'
+import paginationFactory from 'react-bootstrap-table2-paginator'
 import RaisedButton from 'material-ui/RaisedButton'
 import ModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 import Delete from'material-ui/svg-icons/action/delete'
@@ -171,6 +172,7 @@ class Contacts extends React.Component {
               data={ this.props.contactList } 
               columns={ this.contacTableColumns }
               noDataIndication={ this.emptyTable }
+              pagination={ paginationFactory() }
               striped
               hover
               condensed />
