@@ -7,6 +7,7 @@ import { Redirect } from 'react-router-dom'
 
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
+import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card'
 
 import * as actions from '../actions'
 
@@ -48,41 +49,31 @@ class Login extends React.Component {
 
     return (      
       <div className="container">
-
         <div className="row">
-          <div className="col-xs-12">
-            <h1>Login</h1>
+          <div className="col-xs-6 col-xs-offset-3 text-center">
+            <Card>
+              <CardText>
+                <h1>Welcome</h1>
+                <TextField 
+                  floatingLabelText="Username"
+                  value={this.state.username}
+                  onChange={this.handleChange.bind(this, 'username')} />
+                <br/>
+                <TextField 
+                  type="password"
+                  floatingLabelText="Password"
+                  value={this.state.password}
+                  onChange={this.handleChange.bind(this, 'password')} />
+                <br/>
+                <RaisedButton 
+                  label="Login" 
+                  primary={true}
+                  onClick={this.login}
+                  style={{marginTop: '30px'}} />  
+              </CardText>                
+            </Card>
           </div>
         </div>
-
-        <div className="row">
-          <div className="col-xs-12">
-            <TextField 
-              floatingLabelText="Username"
-              value={this.state.username}
-              onChange={this.handleChange.bind(this, 'username')} />
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-xs-12">
-            <TextField 
-              type="password"
-              floatingLabelText="Password"
-              value={this.state.password}
-              onChange={this.handleChange.bind(this, 'password')} />
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-xs-12">
-            <RaisedButton 
-              label="Login" 
-              primary={true}
-              onClick={this.login} />  
-          </div>
-        </div>
-                
       </div>
     ) 
   }

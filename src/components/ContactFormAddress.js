@@ -103,7 +103,7 @@ class ContactFormAddress extends React.Component {
   }
 
   formValidation = () => {
-    let requiredFieldMessage = 'Campo obrigatório. '
+    let requiredFieldMessage = 'Required field. '
     let errorMessages = {}
     
     if (this.state.address.streetName === '') { 
@@ -114,7 +114,7 @@ class ContactFormAddress extends React.Component {
       Number(this.state.address.streetNumber) === 0 ||
       isNaN(Number(this.state.address.streetNumber))
     ) {
-      errorMessages.streetNumber = `${requiredFieldMessage}O Street Number precisa ser um número.`
+      errorMessages.streetNumber = `${requiredFieldMessage}This is need to be a number.`
     }
     
     if (this.state.address.neighborhood === '') { 
@@ -122,7 +122,7 @@ class ContactFormAddress extends React.Component {
     }
 
     if (this.state.address.zip.length < 8) { 
-      errorMessages.zip = `${requiredFieldMessage}O ZipCode deve ter pelo menos 8 caracteres.`
+      errorMessages.zip = `${requiredFieldMessage}This must be at least 8 characters.`
     }
 
     if (this.state.address.city === '') { 
@@ -130,7 +130,7 @@ class ContactFormAddress extends React.Component {
     }
 
     if (this.state.address.state.length !== 2) { 
-      errorMessages.state = `${requiredFieldMessage}O State deve ter 2 caracteres.`         
+      errorMessages.state = `${requiredFieldMessage}This must have 2 characters.`         
     }
 
     if (this.state.address.country === '') { 
@@ -174,101 +174,111 @@ class ContactFormAddress extends React.Component {
       <div className="container">
 
         <div className="row">
-          <div className="col-xs-12">
-            <h1>ContactFormAddress</h1>
+          <div className="col-xs-6 col-xs-offset-3">
+            <h1>Address</h1>
+            <hr/>
           </div>
         </div>
 
 
         <div className="row">
-          <div className="col-xs-12">
+          <div className="col-xs-6 col-xs-offset-3">
             <TextField
               floatingLabelText="Street Name"
               value={this.state.address.streetName}
               onChange={this.handleChange.bind(this, 'streetName')}
-              errorText={this.state.errorMessages.streetName} />
+              errorText={this.state.errorMessages.streetName}
+              fullWidth={true} />
           </div>
         </div>
 
         <div className="row">
-          <div className="col-xs-12">
+          <div className="col-xs-6 col-xs-offset-3">
             <TextField
               floatingLabelText="Street Number"
               value={this.state.address.streetNumber}
               onChange={this.handleChange.bind(this, 'streetNumber')}
-              errorText={this.state.errorMessages.streetNumber} />
+              errorText={this.state.errorMessages.streetNumber}
+              fullWidth={true} />
           </div>
         </div>
 
         <div className="row">
-          <div className="col-xs-12">
+          <div className="col-xs-6 col-xs-offset-3">
             <TextField
               floatingLabelText="Neighborhood"
               value={this.state.address.neighborhood}
               onChange={this.handleChange.bind(this, 'neighborhood')}
-              errorText={this.state.errorMessages.neighborhood} />
+              errorText={this.state.errorMessages.neighborhood}
+              fullWidth={true} />
           </div>
         </div>
 
         <div className="row">
-          <div className="col-xs-12">
+          <div className="col-xs-6 col-xs-offset-3">
             <TextField
               floatingLabelText="Complement"
               value={this.state.address.complement}
               onChange={this.handleChange.bind(this, 'complement')}
-              errorText={this.state.errorMessages.complement} />
+              errorText={this.state.errorMessages.complement}
+              fullWidth={true} />
           </div>
         </div>
 
         <div className="row">
-          <div className="col-xs-12">
+          <div className="col-xs-6 col-xs-offset-3">
             <TextField
               floatingLabelText="Zip"
               value={this.state.address.zip}
               onChange={this.handleChange.bind(this, 'zip')}
-              errorText={this.state.errorMessages.zip} />
+              errorText={this.state.errorMessages.zip}
+              fullWidth={true} />
           </div>
         </div>
 
         <div className="row">
-          <div className="col-xs-12">
+          <div className="col-xs-6 col-xs-offset-3">
             <TextField
               floatingLabelText="City"
               value={this.state.address.city}
               onChange={this.handleChange.bind(this, 'city')}
-              errorText={this.state.errorMessages.city} />
+              errorText={this.state.errorMessages.city}
+              fullWidth={true} />
           </div>
         </div>
 
         <div className="row">
-          <div className="col-xs-12">
+          <div className="col-xs-6 col-xs-offset-3">
             <TextField
               floatingLabelText="State"
               value={this.state.address.state}
               onChange={this.handleChange.bind(this, 'state')}
-              errorText={this.state.errorMessages.state} />
+              errorText={this.state.errorMessages.state}
+              fullWidth={true} />
           </div>
         </div>
 
         <div className="row">
-          <div className="col-xs-12">
+          <div className="col-xs-6 col-xs-offset-3">
             <TextField
               floatingLabelText="Country"
               value={this.state.address.country}
               onChange={this.handleChange.bind(this, 'country')}
-              errorText={this.state.errorMessages.country} />
+              errorText={this.state.errorMessages.country}
+              fullWidth={true} />
           </div>
         </div>
 
         <div className="row">
-        <div className="col-xs-6">
+          <div className="col-xs-6 col-xs-offset-3">
+            <hr/> 
+            <hr/> 
             <RaisedButton 
-              label="Previous Step" 
-              primary={true}           
+              className="pull-left"            
+              label="Previous Step"           
               onClick={this.handlePreviousStep} />           
-          </div>
-          <div className="col-xs-6">
             <RaisedButton 
+              className="pull-right"            
               label="Save Contact" 
               primary={true} 
               onClick={this.handleSaveContact} />           

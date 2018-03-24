@@ -145,7 +145,7 @@ class ContactFormUserInfo extends React.Component {
   }
 
   formValidation = () => {
-    let requiredFieldMessage = 'Campo obrigatório. '
+    let requiredFieldMessage = 'Required field. '
     let errorMessages = {}
     
     if (this.state.userInfo.email === '') {
@@ -174,12 +174,12 @@ class ContactFormUserInfo extends React.Component {
         this.state.userInfo.website === ''
       ) ) {
         if (this.state.pessoa === 'pf') {
-          errorMessages.cpf = `${requiredFieldMessage}O CPF deve conter 11 caracteres.`
+          errorMessages.cpf = `${requiredFieldMessage}This must have 11 characters.`
           errorMessages.gender = requiredFieldMessage
         } 
 
         if (this.state.pessoa === 'pj') {
-          errorMessages.cnpj = `${requiredFieldMessage}O CNPJ deve conter 14 caracteres.`
+          errorMessages.cnpj = `${requiredFieldMessage}This must have 14 characters.`
           errorMessages.website = requiredFieldMessage
         }
       }
@@ -221,43 +221,48 @@ class ContactFormUserInfo extends React.Component {
       <div className="container">
 
         <div className="row">
-          <div className="col-xs-12">
-            <h1>ContactFormUserInfo</h1>
+          <div className="col-xs-6 col-xs-offset-3">
+            <h1>User Info</h1>
+            <hr/>
           </div>
         </div>
 
         <div className="row">
-          <div className="col-xs-12">
+          <div className="col-xs-6 col-xs-offset-3">
             <TextField
               floatingLabelText="Name"
               value={this.state.userInfo.name}
               onChange={this.handleTextFieldChange.bind(this, 'name')}
-              errorText={this.state.errorMessages.name}  />
+              errorText={this.state.errorMessages.name}
+              fullWidth={true} />
           </div>
         </div>
         
         <div className="row">
-          <div className="col-xs-12">
+          <div className="col-xs-6 col-xs-offset-3">
             <TextField
               floatingLabelText="e-mail"
               value={this.state.userInfo.email}
               onChange={this.handleTextFieldChange.bind(this, 'email')}
-              errorText={this.state.errorMessages.email} />
+              errorText={this.state.errorMessages.email}
+              fullWidth={true} />
           </div>
         </div>
 
         <div className="row">
-          <div className="col-xs-12">
+          <div className="col-xs-6 col-xs-offset-3">
             <TextField
               floatingLabelText="Telephone"
               value={this.state.userInfo.telephone}
               onChange={this.handleTextFieldChange.bind(this, 'telephone')}
-              errorText={this.state.errorMessages.telephone} />
+              errorText={this.state.errorMessages.telephone}
+              fullWidth={true} />
           </div>
         </div>
 
         <div className="row">
-          <div className="col-xs-12">
+          <div className="col-xs-6 col-xs-offset-3">
+            <hr/>
             <RadioButtonGroup name='genderRadioButtonGroup' onChange={this.handleRadioChange}>
               <RadioButton value="pf" label="Pessoa Física" />
               <RadioButton value="pj" label="Pessoa Jurídica" />
@@ -269,31 +274,33 @@ class ContactFormUserInfo extends React.Component {
         </div>
 
         <div className="row">
-          <div className="col-xs-12">
+          <div className="col-xs-6 col-xs-offset-3">
           { this.state.pessoa === 'pf' ? (
             <TextField
               floatingLabelText="CPF"
               value={this.state.userInfo.cpf}
               onChange={this.handleTextFieldChange.bind(this, 'cpf')}
-              errorText={this.state.errorMessages.cpf} />
+              errorText={this.state.errorMessages.cpf}
+              fullWidth={true} />
           ) : '' }
           </div>
         </div>
 
         <div className="row">
-          <div className="col-xs-12">
+          <div className="col-xs-6 col-xs-offset-3">
           { this.state.pessoa === 'pj' ? (          
             <TextField
               floatingLabelText="CNPJ"
               value={this.state.userInfo.cnpj}
               onChange={this.handleTextFieldChange.bind(this, 'cnpj')}
-              errorText={this.state.errorMessages.cnpj} />
+              errorText={this.state.errorMessages.cnpj}
+              fullWidth={true} />
           ) : '' }
           </div>
         </div>
 
         <div className="row">
-          <div className="col-xs-12">
+          <div className="col-xs-6 col-xs-offset-3">
             {/* valores 'm' e 'f' estão 'hardcoded', 
             isso não é bom, seria melhor se viessem da API */}
             { this.state.pessoa === 'pf' ? (
@@ -301,7 +308,8 @@ class ContactFormUserInfo extends React.Component {
                 floatingLabelText="Gender"
                 value={this.state.userInfo.gender}
                 onChange={this.handleSelectFieldChange.bind(this, 'gender')}
-                errorText={this.state.errorMessages.gender} >
+                errorText={this.state.errorMessages.gender}
+                fullWidth={true} >
                 <MenuItem value={'m'} primaryText="Masculino" />
                 <MenuItem value={'f'} primaryText="Feminino" />
               </SelectField>
@@ -310,30 +318,32 @@ class ContactFormUserInfo extends React.Component {
         </div>
 
         <div className="row">
-          <div className="col-xs-12">
-          { this.state.pessoa === 'pj' ? (          
-            <TextField
-              floatingLabelText="Website"
-              value={this.state.userInfo.website}
-              onChange={this.handleTextFieldChange.bind(this, 'website')}
-              errorText={this.state.errorMessages.website} />
-          ) : '' }
+          <div className="col-xs-6 col-xs-offset-3">
+            { this.state.pessoa === 'pj' ? (          
+              <TextField
+                floatingLabelText="Website"
+                value={this.state.userInfo.website}
+                onChange={this.handleTextFieldChange.bind(this, 'website')}
+                errorText={this.state.errorMessages.website}
+                fullWidth={true} />
+            ) : '' }
           </div>
         </div>
 
         <div className="row">
-          <div className="col-xs-6">
+          <div className="col-xs-6 col-xs-offset-3">
+            <hr/> 
+            <hr/> 
             <RaisedButton
+              className="pull-left"
               label="Cancel" 
-              primary={true}
               onClick={this.handleCancel} />           
-          </div>      
-          <div className="col-xs-6">
             <RaisedButton
+              className="pull-right"
               label="Next Step" 
               primary={true}
               onClick={this.handleNextStep} />           
-          </div>
+          </div>      
         </div>
 
       </div>

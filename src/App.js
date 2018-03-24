@@ -25,6 +25,10 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
 import './App.css'
 
+import RaisedButton from 'material-ui/RaisedButton'
+import AppBar from 'material-ui/AppBar'
+
+
 import axios from 'axios'
 
 
@@ -86,21 +90,22 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 )
 
 const AuthButton = withRouter(
-  ({ history }) =>
-    fakeAuth.isAuthenticated ? (
-      <p>
-        Welcome!{" "}
-        <button
-          onClick={() => {
-            fakeAuth.signout(() => history.push("/"))
-          }}
-        >
-          Sign out
-        </button>
-      </p>
-    ) : (
-      <p>You are not logged in.</p>
-    )
+  ({ history }) => (
+    <AppBar
+      iconElementLeft={
+        <img 
+          style={{marginTop: '11px', marginLeft: '20px'}} 
+          src="https://paguemob.com/img/logo-white.svg" />
+      }
+      iconElementRight={
+        fakeAuth.isAuthenticated ? (
+          <RaisedButton label="Sign out" 
+            style={{marginTop: '5px', marginRight: '20px'}}
+            onClick={() => { fakeAuth.signout(() => history.push("/")) }} />   
+        ) : ''
+      }
+    />
+  )
 )
 
 class App extends Component {
@@ -127,6 +132,11 @@ class App extends Component {
                 <PrivateRoute path="/new-contact-step-2" component={ContactFormAddress} />
                 <PrivateRoute path="/edit-contact-step-1/:id" component={ContactFormUserInfo} />
                 <PrivateRoute path="/edit-contact-step-2/:id" component={ContactFormAddress} />
+                <div className="footer">
+                  <small>Keep calm, it´s just a test.</small>
+                  <br/>
+                  <small>github.com/thiagocolen/paguemod-frontend-test</small>
+                </div>
               </div>
             </BrowserRouter>
           </Provider>

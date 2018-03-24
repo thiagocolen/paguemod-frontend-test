@@ -131,7 +131,9 @@ class Contacts extends React.Component {
     text: 'Address'
   }, {
     dataField: 'id',
-    text: 'Actions',
+    text: '',
+    classes: 'text-right',
+    headerStyle: { width: '80px' },
     formatter: this.actionButtons.bind(this)
   }]
 
@@ -150,23 +152,21 @@ class Contacts extends React.Component {
       <div className="container">
 
         <div className="row">
-          <div className="col-xs-12">
-            <h1>Contacts </h1>
+          <div className="col-xs-7 col-xs-offset-1">
+            <h1>Clients</h1>
+            <br/>
+          </div>
+          <div className="col-xs-3 text-right">
+            <RaisedButton 
+              label="New Contact" 
+              primary={true}
+              style={{marginTop: '20px'}}
+              onClick={() => this.props.history.push('/new-contact-step-1')} />
           </div>
         </div>
 
         <div className="row">
-          <div className="col-xs-3 col-xs-offset-9">
-            <Link to="/new-contact-step-1">
-              <RaisedButton 
-                label="New Contact" 
-                primary={true} />           
-            </Link>
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-xs-12">
+          <div className="col-xs-10 col-xs-offset-1">
             <BootstrapTable 
               keyField='id' 
               data={ this.props.contactList } 
