@@ -48,7 +48,7 @@ class Login extends React.Component {
     }
 
     return (      
-      <div className="container">
+      <div className="container" style={{backgroundColor: 'transparent', marginBottom: '200px'}}>
         <div className="row">
           <div className="col-xs-6 col-xs-offset-3 text-center">
             <Card>

@@ -1,7 +1,13 @@
 
+body {
+  background-image: url("https://paguemob.com/img/header.jpg");
+  background-position: center;
+}
+
 .container {
   padding-top: 50px;
   padding-bottom: 100px;
+  background-color: white;
 }
 
 .footer {
@@ -24,4 +30,19 @@ hr {
 .react-bootstrap-table-pagination-list ul {
   margin-top: 0;
   float: right;
+}
+
+.pagination>.active>a,
+.pagination>.active>a:focus,
+.pagination>.active>a:hover,
+.pagination>.active>span,
+.pagination>.active>span:focus,
+.pagination>.active>span:hover {
+  background-color: #f05f40;
+  border-color: #f05f40;
+}
+
+.pagination>li>a, 
+.pagination>li>span {
+  color: #f05f40;
 }

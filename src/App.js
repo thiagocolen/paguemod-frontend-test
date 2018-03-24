@@ -21,6 +21,7 @@ import ContactFormAddress from './components/ContactFormAddress'
 import Login from './components/Login'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
 import './App.css'
@@ -108,10 +109,16 @@ const AuthButton = withRouter(
   )
 )
 
+const muiTheme = getMuiTheme({
+  palette: {
+    primary1Color: '#f05f40'
+  }
+})
+
 class App extends Component {
   render() {
     return (
-      <MuiThemeProvider>
+      <MuiThemeProvider muiTheme={muiTheme}>
           <ReduxBlockUi
             tag="div"
             block={[/_PENDING/]}
