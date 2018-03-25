@@ -40,7 +40,6 @@ class ContactFormAddress extends React.Component {
   }
 
   componentDidMount() {
-    console.log('componentDidMount')
     if (
       this.props.match.path === '/edit-contact-step-2/:id' &&
       this.props.newContact.id !== undefined
@@ -50,16 +49,35 @@ class ContactFormAddress extends React.Component {
   }  
 
   componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps', nextProps)
+    console.log('nextProps', nextProps)
+
+    if (nextProps.newContact.address.zip !== '') {
+      this.setState({
+        address: {
+          zip: nextProps.newContact.address.zip,
+          streetName: nextProps.newContact.address.streetName,
+          neighborhood: nextProps.newContact.address.neighborhood,
+          city: nextProps.newContact.address.city,
+          state: nextProps.newContact.address.state,
+          country: nextProps.newContact.address.country 
+        }
+      })
+    }
 
     if (nextProps.newContactAddedMessage === 'ADDRESS_ADDED') {
-
       if (this.props.match.path === '/edit-contact-step-2/:id') {
-        this.props.actions.editContact(nextProps.newContact, nextProps.newContact.id, this.props.auth)
+        this.props.actions.editContact(
+          nextProps.newContact, 
+          nextProps.newContact.id, 
+          this.props.auth
+        )
         return
       }
   
-      this.props.actions.addContact(nextProps.newContact, this.props.auth)
+      this.props.actions.addContact(
+        nextProps.newContact, 
+        this.props.auth
+      )
       return
     }
 
@@ -169,6 +187,10 @@ class ContactFormAddress extends React.Component {
     return true
   }
 
+  handleOnZipBlur = () => {
+    this.props.actions.getAddressByCep(this.state.address.zip)
+  }
+
   render() {
     return (
       <div className="container">
@@ -180,6 +202,17 @@ class ContactFormAddress extends React.Component {
           </div>
         </div>
 
+        <div className="row">
+          <div className="col-xs-6 col-xs-offset-3">
+            <TextField
+              floatingLabelText="Zip"
+              value={this.state.address.zip}
+              onChange={this.handleChange.bind(this, 'zip')}
+              errorText={this.state.errorMessages.zip}
+              fullWidth={true}
+              onBlur={this.handleOnZipBlur} />
+          </div>
+        </div>
 
         <div className="row">
           <div className="col-xs-6 col-xs-offset-3">
@@ -221,17 +254,6 @@ class ContactFormAddress extends React.Component {
               value={this.state.address.complement}
               onChange={this.handleChange.bind(this, 'complement')}
               errorText={this.state.errorMessages.complement}
-              fullWidth={true} />
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-xs-6 col-xs-offset-3">
-            <TextField
-              floatingLabelText="Zip"
-              value={this.state.address.zip}
-              onChange={this.handleChange.bind(this, 'zip')}
-              errorText={this.state.errorMessages.zip}
               fullWidth={true} />
           </div>
         </div>
@@ -305,7 +327,16 @@ ContactFormAddress.propTypes = {
 const mapStateToProps = (state) => ({
   auth: state.authReducer,
   contactList: state.contactsReducer.contactList,  
-  newContact: state.contactsReducer.newContact,
+  newContact: {
+    address: {
+      streetName: state.contactsReducer.newContact.address.streetName,
+      neighborhood: state.contactsReducer.newContact.address.neighborhood,
+      zip: state.contactsReducer.newContact.address.zip,
+      city: state.contactsReducer.newContact.address.city,
+      state: state.contactsReducer.newContact.address.state,
+      country: state.contactsReducer.newContact.address.country
+    }
+  },
   newContactAddedMessage: state.contactsReducer.newContactAddedMessage
 })
 

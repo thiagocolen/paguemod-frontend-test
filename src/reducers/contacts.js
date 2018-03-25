@@ -137,6 +137,23 @@ const contactsReducer = (state = initialState, action) => {
         newContact: action.payload
       }
 
+    case `${types.GET_ADDRESS_BY_CEP}_FULFILLED`:
+      return {
+        ...state,
+        newContact: {
+          ...state.newContact,
+          address: {
+            ...state.newContact.address,
+            streetName: action.payload.logradouro,
+            neighborhood: action.payload.bairro,
+            zip: action.payload.cep,
+            city: action.payload.localidade,
+            state: action.payload.uf,
+            country: 'Brasil'       
+          }        
+        }
+      }
+
     default:
       return state
   }

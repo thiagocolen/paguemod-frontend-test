@@ -15,103 +15,16 @@ import * as contactActions from '../actions'
 
 
 class Contacts extends React.Component {
-  // eslint-disable-next-line
-  constructor(props) {
-    super(props)
-  }
 
   componentDidMount() {
-    console.log('componentDidMount')
     this.props.actions.getAllContacts(this.props.auth)
-    // this.editContact()
-    // this.addContact()
-    // this.deleteContact()
   }  
 
   componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps', nextProps)
-  
     if (nextProps.newContactAddedMessage === 'DELETED_CONTACT') {
       this.props.actions.clearNewContactAddedMessage()    
       this.props.actions.getAllContacts(this.props.auth)
     }
-  }
-
-  deleteContact () {
-    let someContact = { 
-      userInfo: { 
-        name: 'EditedStringAgain',
-        cpf: '12345678901',
-        cnpj: '12345678901234',
-        gender: 'm',
-        website: 'String',
-        email: 'String',
-        telephone: 'String' 
-      },
-      address: { 
-        streetName: 'String',
-        streetNumber: 1,
-        neighborhood: 'String',
-        complement: 'String',
-        zip: '12345678',
-        city: 'String',
-        state: 'SP',
-        country: 'String' 
-      },
-      id:"-L7qkHyzMTvIkeWy48mU"
-    }
-    this.props.actions.deleteContact(someContact.id, this.props.auth)  
-  }
-
-  addContact () {
-    let someContact = { 
-      userInfo: { 
-        name: 'NewString',
-        cpf: '12345678901',
-        cnpj: '12345678901234',
-        gender: 'm',
-        website: 'String',
-        email: 'String',
-        telephone: 'String' 
-      },
-      address: { 
-        streetName: 'String',
-        streetNumber: 1,
-        neighborhood: 'String',
-        complement: 'String',
-        zip: '12345678',
-        city: 'String',
-        state: 'SP',
-        country: 'String' 
-      } 
-    }
-    this.props.actions.addContact(someContact, this.props.auth)
-  }
-
-  editContact () {
-    let someContact = { 
-      userInfo: { 
-        name: 'EditedStringAgain',
-        cpf: '12345678901',
-        cnpj: '12345678901234',
-        gender: 'm',
-        website: 'String',
-        email: 'String',
-        telephone: 'String' 
-      },
-      address: { 
-        streetName: 'String',
-        streetNumber: 1,
-        neighborhood: 'String',
-        complement: 'String',
-        zip: '12345678',
-        city: 'String',
-        state: 'SP',
-        country: 'String' 
-      },
-      id:"-L7qkHyzMTvIkeWy48mU" 
-    }
-    this.props.actions.editContact(someContact, someContact.id, this.props.auth)  
   }
 
   actionButtons = (cell, row, rowIndex) => {
@@ -123,19 +36,21 @@ class Contacts extends React.Component {
     )
   }
 
-  contacTableColumns = [{
-    dataField: 'userInfo.name',
-    text: 'Name'
-  }, {
-    dataField: 'address.streetName',
-    text: 'Address'
-  }, {
-    dataField: 'id',
-    text: '',
-    classes: 'text-right',
-    headerStyle: { width: '80px' },
-    formatter: this.actionButtons.bind(this)
-  }]
+  contacTableColumns = [
+    {
+      dataField: 'userInfo.name',
+      text: 'Name'
+    }, {
+      dataField: 'address.streetName',
+      text: 'Address'
+    }, {
+      dataField: 'id',
+      text: '',
+      classes: 'text-right',
+      headerStyle: { width: '80px' },
+      formatter: this.actionButtons.bind(this)
+    }
+  ]
 
   emptyTable = () => (<h4>loading data</h4>)
 
@@ -194,7 +109,7 @@ Contacts.propTypes = {
 const mapStateToProps = (state) => ({
   auth: state.authReducer,
   contactList: state.contactsReducer.contactList,
-  newContactAddedMessage: state.contactsReducer.newContactAddedMessage
+  newContactAddedMessage: state.contactsReducer.newContactAddedMessage,
 })
 
 const mapDispatchToProps = (dispatch) => {

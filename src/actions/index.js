@@ -74,3 +74,9 @@ export const setUserData = (username, password) => dispatch => {
   })
 }
 
+export const getAddressByCep = (cep) => dispatch => {
+  dispatch({
+    type: types.GET_ADDRESS_BY_CEP,
+    payload: api.getAddressByCep(cep)
+  })
+}

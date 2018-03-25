@@ -12,7 +12,6 @@ import reduxMiddleware from 'react-block-ui/reduxMiddleware';
 import 'react-block-ui/style.css'
 import CircularProgress from 'material-ui/CircularProgress'
 
-
 import rootReducer from './reducers'
 
 import ContactList from './components/ContactList'
@@ -28,7 +27,6 @@ import './App.css'
 
 import RaisedButton from 'material-ui/RaisedButton'
 import AppBar from 'material-ui/AppBar'
-
 
 import axios from 'axios'
 
@@ -153,6 +151,5 @@ class App extends Component {
     )
   }
 }
-
 
 export default App
