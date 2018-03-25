@@ -12,12 +12,10 @@ import reduxMiddleware from 'react-block-ui/reduxMiddleware';
 import 'react-block-ui/style.css'
 import CircularProgress from 'material-ui/CircularProgress'
 
-
 import rootReducer from './reducers'
 
 import ContactList from './components/ContactList'
-import ContactFormUserInfo from './components/ContactFormUserInfo'
-import ContactFormAddress from './components/ContactFormAddress'
+import ContactForm from './components/ContactForm'
 import Login from './components/Login'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
@@ -28,7 +26,6 @@ import './App.css'
 
 import RaisedButton from 'material-ui/RaisedButton'
 import AppBar from 'material-ui/AppBar'
-
 
 import axios from 'axios'
 
@@ -135,10 +132,8 @@ class App extends Component {
                 <Route exact path="/" render={() => (<Redirect to="/contacts"/>) }/>                
                 <Route path="/login" render={(props) => (<Login {...props} fakeAuth={fakeAuth}/>)} />                
                 <PrivateRoute path="/contacts" component={ContactList} />
-                <PrivateRoute path="/new-contact-step-1" component={ContactFormUserInfo} />
-                <PrivateRoute path="/new-contact-step-2" component={ContactFormAddress} />
-                <PrivateRoute path="/edit-contact-step-1/:id" component={ContactFormUserInfo} />
-                <PrivateRoute path="/edit-contact-step-2/:id" component={ContactFormAddress} />
+                <PrivateRoute path="/new-contact" component={ContactForm} />
+                <PrivateRoute path="/edit-contact/:id" component={ContactForm} />
                 <div className="footer">
                   <small>Keep calm, it´s just a test.</small>
                   <br/>

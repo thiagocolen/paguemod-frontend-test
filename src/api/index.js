@@ -1,7 +1,5 @@
 import axios from 'axios'
 
-
-
 class Api {
 
   // Esta paginação pela API não está sendo usada porque eu precisaria
@@ -20,11 +18,26 @@ class Api {
     }) 
   }
 
+  static getContact (auth, id) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/contacts`, auth)
+        .then((response) => {
+          let selectedContact = response.data.filter(item => {
+            return item.id === id
+          })
+          resolve(selectedContact[0]) 
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    }) 
+  }
+
   static postContact (contact, auth) {
     return new Promise((resolve, reject) => {
       axios.post('/contacts', contact, auth)
-        .then(() => {
-          resolve()
+        .then((res) => {
+          resolve(res.statusText)
         })
         .catch((error) => {
           reject(error)
@@ -35,10 +48,10 @@ class Api {
   static putContact (contact, contactId, auth) {
     return new Promise((resolve, reject) => {
       axios.put('/contacts/' + contactId, contact, auth)
-        .then(() => {
-          resolve()
+        .then((res) => {
+          resolve(res.statusText)
         })
-        .catch((error) => {
+      .catch((error) => {
           reject(error)
         })
     })

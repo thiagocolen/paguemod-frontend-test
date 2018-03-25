@@ -2,55 +2,106 @@ import * as types from '../constants/ActionTypes'
 
 const initialState = {
   contactList: [],
-  newContact: {
-    userInfo: {},
-    address: {
+  apiResponse: '',
+  pessoa: '',
+  contact: {
+    name: '',
+    cpf: '',
+    cnpj: '',
+    gender: '',
+    website: '',
+    email: '',
+    telephone: '',
+    streetName: '',
+    streetNumber: '',
+    neighborhood: '',
+    complement: '',
+    zip: '',
+    city: '',
+    state: '',
+    country: ''       
+  }
+}
+
+const updateContactToForm = (state, payload) => {
+
+  if (payload.prop === 'pessoa') {
+    return {
+      ...state,
+      [payload.prop]: payload.newValue 
+    }
+  }
+  
+  return {
+    ...state,
+    contact: {
+      ...state.contact,
+      [payload.prop]: payload.newValue
+    }
+  }
+}
+
+const clearContact = (state, payload) => {
+  return {
+    ...state,
+    apiResponse: '',
+    pessoa: '',
+    contact: {
+      name: '',
+      cpf: '',
+      cnpj: '',
+      gender: '',
+      website: '',
+      email: '',
+      telephone: '',
       streetName: '',
-      streetNumber: null,
+      streetNumber: '',
       neighborhood: '',
       complement: '',
       zip: '',
       city: '',
       state: '',
-      country: ''       
+      country: '' 
     }
-  },
-  newContactAddedMessage: ''
+  }
 }
 
-const newContactUserInfo = (state, payload) => {
-  console.log('newContactUserInfo', payload)
-  if (payload.pessoa === 'pf') {
+const addContactOnState = (state, payload) => {
+
+  let contact = {
+    name: payload.userInfo.name,
+    cpf: payload.userInfo.cpf,
+    cnpj: payload.userInfo.cnpj,
+    gender: payload.userInfo.gender,
+    website: payload.userInfo.website,
+    email: payload.userInfo.email,
+    telephone: payload.userInfo.telephone,
+    streetName: payload.address.streetName,
+    streetNumber: payload.address.streetNumber.toString(),
+    neighborhood: payload.address.neighborhood,
+    complement: payload.address.complement,
+    zip: payload.address.zip,
+    city: payload.address.city,
+    state: payload.address.state,
+    country: payload.address.country
+  }
+
+  if (payload.userInfo.cpf) {
     return {
       ...state,
-      newContact: {
-        ...state.newContact,
-        userInfo: {
-          name: payload.userInfo.name,
-          cpf: payload.userInfo.cpf,
-          gender: payload.userInfo.gender,
-          email: payload.userInfo.email,
-          telephone: payload.userInfo.telephone 
-        }
-      }
+      contact: contact,
+      pessoa: 'pf'
     }
   }
 
-  if (payload.pessoa === 'pj') {
+  if (payload.userInfo.cnpj) {
     return {
       ...state,
-      newContact: {
-        ...state.newContact,
-        userInfo: {
-          name: payload.userInfo.name,
-          cnpj: payload.userInfo.cnpj,
-          website: payload.userInfo.website,
-          email: payload.userInfo.email,
-          telephone: payload.userInfo.telephone 
-        }
-      }
+      contact: contact,
+      pessoa: 'pj'
     }
-  }  
+  }
+
 }
 
 const contactsReducer = (state = initialState, action) => {
@@ -60,82 +111,28 @@ const contactsReducer = (state = initialState, action) => {
       return {
         ...state,
         contactList: action.payload
-      } 
+      }
+      
+    case `${types.GET_CONTACT}_FULFILLED`:
+      return addContactOnState(state, action.payload)
+      
+    case `${types.ADD_CONTACT}_FULFILLED`:
+      return {
+        ...state,
+        apiResponse: action.payload
+      }
 
     case `${types.EDIT_CONTACT}_FULFILLED`:
       return {
         ...state,
-        newContact: {
-          userInfo: {},
-          address: {}
-        },
-        newContactAddedMessage: 'FULFILLED'
-      } 
-
-    case `${types.ADD_CONTACT}_FULFILLED`:
-      return {
-        ...state,
-        newContact: {
-          userInfo: {},
-          address: {}
-        },
-        newContactAddedMessage: 'FULFILLED'
-      } 
-
-    case `${types.ADD_CONTACT}_PENDING`:
-      return {
-        ...state,
-        newContactAddedMessage: 'PENDING'
-      } 
-
-    case `${types.DELETE_CONTACT}_FULFILLED`:
-      return {
-        ...state,
-        newContactAddedMessage: 'DELETED_CONTACT'
+        apiResponse: action.payload
       }
       
-    case types.NEW_CONTACT_USER_INFO: 
-      return newContactUserInfo(state, action.payload)
+    case types.UPDATE_CONTACT_FORM: 
+      return updateContactToForm(state, action.payload)
 
-    case types.NEW_CONTACT_ADDRESS: 
-      return {
-        ...state,
-        newContact: {
-          ...state.newContact,
-          address: {
-            streetName: action.payload.streetName,
-            streetNumber: Number(action.payload.streetNumber),
-            neighborhood: action.payload.neighborhood,
-            complement: action.payload.complement,
-            zip: action.payload.zip,
-            city: action.payload.city,
-            state: action.payload.state,
-            country: action.payload.country              
-          }
-        },
-        newContactAddedMessage: 'ADDRESS_ADDED'        
-      }
-
-    case types.NEW_CONTACT_CANCEL:
-      return {
-        ...state,
-        newContact: {
-          userInfo: {},
-          address: {}
-        }
-      }
-
-    case types.CLEAR_NEW_CONTACT_ADDED_MESSAGE:
-      return {
-        ...state,
-        newContactAddedMessage: ''
-      }
-
-    case types.ADD_SELECTED_CONTACT_TO_FORM:
-      return {
-        ...state,
-        newContact: action.payload
-      }
+    case types.CLEAR_CONTACT_FORM:
+      return clearContact(state)
 
     default:
       return state

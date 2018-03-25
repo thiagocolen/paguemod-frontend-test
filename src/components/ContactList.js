@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import { Link } from 'react-router-dom' //todo: remove this
 import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -15,104 +14,10 @@ import * as contactActions from '../actions'
 
 
 class Contacts extends React.Component {
-  // eslint-disable-next-line
-  constructor(props) {
-    super(props)
-  }
 
   componentDidMount() {
-    console.log('componentDidMount')
     this.props.actions.getAllContacts(this.props.auth)
-    // this.editContact()
-    // this.addContact()
-    // this.deleteContact()
   }  
-
-  componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps', nextProps)
-  
-    if (nextProps.newContactAddedMessage === 'DELETED_CONTACT') {
-      this.props.actions.clearNewContactAddedMessage()    
-      this.props.actions.getAllContacts(this.props.auth)
-    }
-  }
-
-  deleteContact () {
-    let someContact = { 
-      userInfo: { 
-        name: 'EditedStringAgain',
-        cpf: '12345678901',
-        cnpj: '12345678901234',
-        gender: 'm',
-        website: 'String',
-        email: 'String',
-        telephone: 'String' 
-      },
-      address: { 
-        streetName: 'String',
-        streetNumber: 1,
-        neighborhood: 'String',
-        complement: 'String',
-        zip: '12345678',
-        city: 'String',
-        state: 'SP',
-        country: 'String' 
-      },
-      id:"-L7qkHyzMTvIkeWy48mU"
-    }
-    this.props.actions.deleteContact(someContact.id, this.props.auth)  
-  }
-
-  addContact () {
-    let someContact = { 
-      userInfo: { 
-        name: 'NewString',
-        cpf: '12345678901',
-        cnpj: '12345678901234',
-        gender: 'm',
-        website: 'String',
-        email: 'String',
-        telephone: 'String' 
-      },
-      address: { 
-        streetName: 'String',
-        streetNumber: 1,
-        neighborhood: 'String',
-        complement: 'String',
-        zip: '12345678',
-        city: 'String',
-        state: 'SP',
-        country: 'String' 
-      } 
-    }
-    this.props.actions.addContact(someContact, this.props.auth)
-  }
-
-  editContact () {
-    let someContact = { 
-      userInfo: { 
-        name: 'EditedStringAgain',
-        cpf: '12345678901',
-        cnpj: '12345678901234',
-        gender: 'm',
-        website: 'String',
-        email: 'String',
-        telephone: 'String' 
-      },
-      address: { 
-        streetName: 'String',
-        streetNumber: 1,
-        neighborhood: 'String',
-        complement: 'String',
-        zip: '12345678',
-        city: 'String',
-        state: 'SP',
-        country: 'String' 
-      },
-      id:"-L7qkHyzMTvIkeWy48mU" 
-    }
-    this.props.actions.editContact(someContact, someContact.id, this.props.auth)  
-  }
 
   actionButtons = (cell, row, rowIndex) => {
     return(
@@ -137,14 +42,15 @@ class Contacts extends React.Component {
     formatter: this.actionButtons.bind(this)
   }]
 
-  emptyTable = () => (<h4>loading data</h4>)
+  emptyTable = () => (<h4>keep calm, we loading your data...</h4>)
 
   handleEditContact = (id) => {
-    this.props.history.push('/edit-contact-step-1/' + id)
+    this.props.history.push('/edit-contact/' + id)
   }
 
   handleDeleteContact = (id) => {
     this.props.actions.deleteContact(id, this.props.auth)
+      .then(() => this.props.actions.getAllContacts(this.props.auth))
   }
 
   render() {
@@ -161,7 +67,7 @@ class Contacts extends React.Component {
               label="New Contact" 
               primary={true}
               style={{marginTop: '20px'}}
-              onClick={() => this.props.history.push('/new-contact-step-1')} />
+              onClick={() => this.props.history.push('/new-contact')} />
           </div>
         </div>
 
@@ -187,14 +93,12 @@ class Contacts extends React.Component {
 
 Contacts.propTypes = {
   auth: PropTypes.object,
-  contactList: PropTypes.array,
-  newContactAddedMessage: PropTypes.string
+  contactList: PropTypes.array
 }
 
 const mapStateToProps = (state) => ({
   auth: state.authReducer,
-  contactList: state.contactsReducer.contactList,
-  newContactAddedMessage: state.contactsReducer.newContactAddedMessage
+  contactList: state.contactsReducer.contactList
 })
 
 const mapDispatchToProps = (dispatch) => {

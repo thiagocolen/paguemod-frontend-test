@@ -8,58 +8,54 @@ export const getAllContacts = (auth, sizePerPage, page) => dispatch => {
   })
 }
 
-export const addSelectedContactToForm = (selectedContact) => dispatch => {
+export const getContact = (auth, id) => dispatch => {
   dispatch({
-    type: types.ADD_SELECTED_CONTACT_TO_FORM,
-    payload: selectedContact
+    type: types.GET_CONTACT,
+    payload: api.getContact(auth, id)
   })
 }
 
-export const addContact = (contact, auth) => dispatch => {
+export const addContact = (contact, auth) => dispatch => (
   dispatch({
     type: types.ADD_CONTACT,
     payload: api.postContact(contact, auth)
   })
-}
+)
 
-export const editContact = (contact, contactId, auth) => dispatch => {
+export const editContact = (contact, contactId, auth) => dispatch => (
   dispatch({
     type: types.EDIT_CONTACT,
     payload: api.putContact(contact, contactId, auth)
   })
-}
+)
 
-export const deleteContact = (contactId, auth) => dispatch => {
+export const deleteContact = (contactId, auth) => dispatch => (
   dispatch({
     type: types.DELETE_CONTACT,
     payload: api.deleteContact(contactId, auth)
   })
-}
+)
 
-export const newContactUserInfo = (contactUserInfo) => dispatch => {
+export const addSelectedContactToForm = (selectedContact) => dispatch => {
   dispatch({
-    type: types.NEW_CONTACT_USER_INFO,
-    payload: contactUserInfo
+    type: types.FILL_CONTACT_FORM,
+    payload: selectedContact
   })
 }
 
-export const newContactAddress = (contactAddress) => dispatch => {
+export const updateContactToForm = (prop, newValue) => dispatch => {
   dispatch({
-    type: types.NEW_CONTACT_ADDRESS,
-    payload: contactAddress
+    type: types.UPDATE_CONTACT_FORM,
+    payload: {
+      prop: prop,
+      newValue: newValue
+    }
   })
 }
 
-export const newContactCancel = () => dispatch => {
+export const clearContactForm = () => dispatch => {
   dispatch({
-    type: types.NEW_CONTACT_CANCEL,
-    payload: null
-  })
-}
-
-export const clearNewContactAddedMessage = () => dispatch => {
-  dispatch({
-    type: types.CLEAR_NEW_CONTACT_ADDED_MESSAGE,
+    type: types.CLEAR_CONTACT_FORM,
     payload: null
   })
 }
