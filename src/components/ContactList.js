@@ -42,7 +42,7 @@ class Contacts extends React.Component {
     formatter: this.actionButtons.bind(this)
   }]
 
-  emptyTable = () => (<h4>keep calm, we loading your data...</h4>)
+  emptyTable = () => (<h4>keep calm, we are loading your data...</h4>)
 
   handleEditContact = (id) => {
     this.props.history.push('/edit-contact/' + id)
