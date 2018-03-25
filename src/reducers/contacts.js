@@ -19,7 +19,7 @@ const initialState = {
     zip: '',
     city: '',
     state: '',
-    country: ''       
+    country: ''
   }
 }
 
@@ -133,7 +133,20 @@ const contactsReducer = (state = initialState, action) => {
 
     case types.CLEAR_CONTACT_FORM:
       return clearContact(state)
-
+    
+    case `${types.GET_ADDRESS_BY_CEP}_FULFILLED`:
+      return {
+        ...state,
+        contact: {
+          ...state.contact,
+          streetName: action.payload.logradouro,
+          neighborhood: action.payload.bairro,
+          city: action.payload.localidade,
+          state: action.payload.uf,
+          country: 'Brasil'       
+          }        
+        }
+  
     default:
       return state
   }

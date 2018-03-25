@@ -55,6 +55,10 @@ class ContactForm extends React.Component {
     this.props.actions.updateContactToForm(prop, newValue)    
   }
 
+  handleOnZipBlur = () => {
+    this.props.actions.getAddressByCep(this.props.zip)
+  }
+
   handleNextStep = () => {
     if (this.formValidation(this.props)) {
       this.setState({
@@ -152,7 +156,7 @@ class ContactForm extends React.Component {
 
       if (form.telephone === '' || isNaN(Number(form.telephone))) {
         errors.push(true)
-        this.setState({ telephoneErrorMessage: requiredFieldMessage })
+        this.setState({ telephoneErrorMessage: `${requiredFieldMessage}This is need to be a number.` })
       } else {                
         this.setState({ telephoneErrorMessage: '' })
       }
@@ -260,7 +264,6 @@ class ContactForm extends React.Component {
 
     return errors.length === 0 ? true : false
   }
-
 
   handleSnackbarClose = () => {
     this.setState({ snackbarOpen: false })
@@ -421,6 +424,18 @@ class ContactForm extends React.Component {
             <div className="row">
               <div className="col-xs-6 col-xs-offset-3">
                 <TextField
+                  floatingLabelText="Zip"
+                  value={this.props.zip}
+                  onChange={this.handleTextFieldChange.bind(this, 'zip')}
+                  errorText={this.state.zipErrorMessage}
+                  fullWidth={true}
+                  onBlur={this.handleOnZipBlur} />
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-xs-6 col-xs-offset-3">
+                <TextField
                   floatingLabelText="Street Name"
                   value={this.props.streetName}
                   onChange={this.handleTextFieldChange.bind(this, 'streetName')}
@@ -458,17 +473,6 @@ class ContactForm extends React.Component {
                   value={this.props.complement}
                   onChange={this.handleTextFieldChange.bind(this, 'complement')}
                   errorText={this.state.complementErrorMessage}
-                  fullWidth={true} />
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="col-xs-6 col-xs-offset-3">
-                <TextField
-                  floatingLabelText="Zip"
-                  value={this.props.zip}
-                  onChange={this.handleTextFieldChange.bind(this, 'zip')}
-                  errorText={this.state.zipErrorMessage}
                   fullWidth={true} />
               </div>
             </div>
